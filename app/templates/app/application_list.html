@@ -16,7 +16,12 @@
     <div class="card-group">
         <div class="card bg-light text-center">
             <div class="card-header text-center">
-                <h5 class="mb-0">{{ app.name }}</h5>
+                <h5 class="mb-0">
+                    {{ app.name }}
+                    <a href="{{ app.url }}" target="_blank" title="{% trans 'Go to' %} {{ app.name }}">
+                        {% bs_icon 'box-arrow-up-right' %}
+                    </a>
+                </h5>
             </div>
             <div>
                 {% if app.logo %}
@@ -43,9 +48,6 @@
             </div>
             <div class="card-footer">
                 <small class="text-muted">Last updated 3 mins ago</small>
-                <a href="{{ app.url }}" target="_blank" title="{% trans 'Go to' %} {{ app.name }}">
-                    {% bs_icon 'box-arrow-up-right' %}
-                </a>
             </div>
         </div>
     </div>
