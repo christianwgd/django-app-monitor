@@ -20,7 +20,7 @@
 {% block bootstrap5_title %}{% trans 'Django App Monitor' %}{% endblock %}
 
 {% block bootstrap5_content %}
-<nav class="navbar fixed-top navbar-expand">
+<nav class="navbar fixed-top navbar-expand bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'app/img/app.png' %}" alt="{% trans 'Django App Monitor' %}" height="25">
@@ -35,22 +35,22 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" href="">
-                        <i class="far fa-user"></i>
+                        {% bs_icon 'person-fill' %}
                         {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="{% url 'frontend_auth:logout' %}">
-                            <i class="far fa-sign-out"></i>
+                            {% bs_icon 'lock-fill' %}
                             {% trans 'Log out' %}
                         </a>
                         <a class="dropdown-item" href="{% url 'frontend_auth:password_change' %}">
-                            <i class="far fa-key"></i>
+                            {% bs_icon 'key-fill' %}
                             {% trans 'Password change' %}
                         </a>
                         {% if user.is_superuser %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'admin:index' %}">
-                            <i class="far fa-user-crown"></i>
+                            {% bs_icon 'person-fill-gear' %}
                             {% trans 'Admin' %}
                         </a>
                         {% endif %}
