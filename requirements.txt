@@ -1,0 +1,7 @@
+django==4.2.2
+django-axes==6.0.4
+django-bootstrap5==23.3
+django-bootstrap-icons==0.8.3
+Pillow==9.5.0
+psycopg2-binary==2.9.6
+requests==2.31.0
