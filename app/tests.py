@@ -27,8 +27,14 @@ class ApplicationTest(TestCase):
     def test_app_str(self):
         self.assertEqual(str(self.app), self.app.name)
 
-    def test_app_get_status(self):
-        self.assertEqual(self.app.get_status(), {'code': 404, 'text': 'Not Found'})
+    def test_app_get_http_status(self):
+        self.assertEqual(self.app.get_http_status(), (200, 'OK'))
+
+    def test_app_get_health_check_data(self):
+        self.assertEqual(
+            self.app.get_health_check_data(),
+            None
+        )
 
     def test_application_list(self):
         self.client.force_login(self.admin)
@@ -39,6 +45,5 @@ class ApplicationTest(TestCase):
             response.context['application_list'],
             Application.objects.all(),
         )
-        # We don't have a URL to test, so example.com will respond with 404
-        self.assertEqual(response.context['application_list'][0].code, 404)
+        self.assertEqual(response.context['application_list'][0].code, 200)
 

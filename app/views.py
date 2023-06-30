@@ -10,9 +10,7 @@ class AppList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         apps = Application.objects.filter(admins=self.request.user)
         for app in apps:
-            status = app.get_status()
-            app.code = status['code']
-            app.text = status['text']
-            if app.code == 200:
-                app.detail = status['detail']
+            app.code, app.text = app.get_http_status()
+            if app.use_health_check:
+                app.detail = app.get_health_check_data()
         return apps

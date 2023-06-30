@@ -21,13 +21,15 @@ class Application(models.Model):
     def __str__(self):
         return self.name
 
-    def get_status(self):
+    def get_http_status(self):
+        r = requests.get(f'{self.url}/', timeout=20)
+        return r.status_code, responses[r.status_code]
+
+    def get_health_check_data(self):
         headers = {'Accept': 'application/json'}
         r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
-        status = {'code': r.status_code, 'text': responses[r.status_code]}
         if r.status_code == 200:
-            status['detail'] = r.json()
-        return status
+            return r.json()
 
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     url = models.URLField(verbose_name=_('URL'))
@@ -40,4 +42,10 @@ class Application(models.Model):
     )
     notify_by_email = models.BooleanField(
         verbose_name=_('Notify by email'), default=False,
+    )
+    use_health_check = models.BooleanField(
+        verbose_name=_('Use Django health check'), default=False
+    )
+    use_metrics = models.BooleanField(
+        verbose_name=_('Use Django Prometheus metrics'), default=False
     )
