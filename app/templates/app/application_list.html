@@ -13,22 +13,36 @@
 
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
 {% for app in application_list %}
-    <div class="col">
-        <div class="card bg-light">
-            <a href="{{ app.url }}" target="_blank">
+    <div class="card-group">
+        <div class="card bg-light text-center">
+            <div>
+                {% if app.logo %}
                 <img class="card-img-top" src="{{ app.logo.url }}" alt="{{ app.name }}">
-            </a>
+                {% else %}
+                <img class="card-img-top" src="{% static 'app/img/app.png' %}" alt="{{ app.name }}">
+                {% endif %}
+            </div>
             <div class="card-body text-center bg-white">
-                {% for key, value in app.get_status.items %}
+                <h4>
+                <span class="badge {% if app.code == 200 %}text-bg-success{% else %}text-bg-danger{% endif %}">
+                    Status: {{ app.code }} {{ app.text }}
+                </span>
+                </h4>
+                <p class="mt-2">
+                {% for key, value in app.detail.items %}
                     {% if value == 'working' %}
                         <span class="badge text-bg-success">{{ key }}</span>
                     {% else %}
                         <span class="badge text-bg-danger">{{ key }}</span>
                     {% endif %}
                 {% endfor %}
+                </p>
             </div>
             <div class="card-footer">
                 <small class="text-muted">Last updated 3 mins ago</small>
+                <a href="{{ app.url }}" target="_blank" title="{% trans 'Go to' %} {{ app.name }}">
+                    {% bs_icon 'box-arrow-up-right' %}
+                </a>
             </div>
         </div>
     </div>

@@ -21,15 +21,13 @@ class Application(models.Model):
     def __str__(self):
         return self.name
 
-    @property
     def get_status(self):
         headers = {'Accept': 'application/json'}
         r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
+        status = {'code': r.status_code, 'text': responses[r.status_code]}
         if r.status_code == 200:
-            status = r.json()
-            status[f'Status: {r.status_code} {responses[r.status_code]}'] = 'working'
-            return status
-        return {f'Status: {r.status_code} {responses[r.status_code]}': 'failed'}
+            status['detail'] = r.json()
+        return status
 
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     url = models.URLField(verbose_name=_('URL'))
