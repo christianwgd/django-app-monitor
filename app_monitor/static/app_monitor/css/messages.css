@@ -2,13 +2,16 @@
     position: absolute;
     top: 65px;
     right: 12px;
-    z-index: 999;
-    margin-left: 4rem;
+    z-index: 9999;
+    width: 30rem;
 }
 
-@media (min-width: 577px) {
+@media (max-width: 577px) {
     .message-box {
-        padding-left: 9rem;
+        position: relative;
+        width: 100%;
+        top: 0;
+        left: 0;
     }
 }
 
