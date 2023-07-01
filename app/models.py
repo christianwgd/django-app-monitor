@@ -38,9 +38,9 @@ class Application(models.Model):
             return r.json()
         return {}
 
-    def update_status(self):
+    def update_status(self, bg_only=True):
         self.http_status = self.get_http_status()
-        if self.use_health_check:
+        if self.use_health_check or not bg_only:
             self.health_check = self.get_health_check_data()
         self.save()
 
