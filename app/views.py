@@ -1,9 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 
 from app.models import Application
@@ -14,6 +14,13 @@ class AppList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Application.objects.filter(admins=self.request.user)
+
+
+class AppDetail(UserPassesTestMixin, DetailView):
+    model = Application
+
+    def test_func(self):
+        return self.request.user in self.get_object().admins.all()
 
 
 @require_http_methods(["GET"])

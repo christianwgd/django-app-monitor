@@ -54,3 +54,10 @@ class ApplicationTest(TestCase):
             response.context['application_list'],
             Application.objects.all(),
         )
+
+    def test_application_detail(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse('app:detail', kwargs={'pk': self.app.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('app/application_detail.html')
+        self.assertEqual(response.context['application'], self.app)

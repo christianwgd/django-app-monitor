@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n static django_bootstrap5 bootstrap_icons humanize %}
+
+{% block bootstrap5_extra_head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static "app/css/style.css" %}">
+{% endblock %}
+
+{% block bootstrap5_extra_script %}
+{{ block.super }}
+{% endblock %}
+
+{% block page_title %}Status {{ application.name }}{% endblock %}
+
+
+{% block content %}
+
+<table class="table">
+    <thead>
+        <tr>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="{% if application.http_status == 200 %}ok{% else %}error{% endif %}">
+            <td>HTTP Status</td>
+            <td>{{ application.http_status }} {{ application.get_http_status_text }}</td>
+        </tr>
+        {% if application.health_check %}
+        <tr><td class="text-center" colspan="2">Health Check</td></tr>
+        {% for key, value in application.health_check.items %}
+            <tr class="{% if value == 'working' %}ok{% else %}error{% endif %}">
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+
+{% endblock %}

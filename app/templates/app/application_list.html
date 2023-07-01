@@ -25,8 +25,8 @@
                     <a href="{{ app.url }}" target="_blank" title="{% trans 'Go to' %} {{ app.name }}">
                         {% bs_icon 'box-arrow-up-right' %}
                     </a>
-                    <a href="{% url 'app:update' app.id %}" title="{% trans 'Go to' %} {{ app.name }}" class="float-end">
-                        {% bs_icon 'arrow-clockwise' %}
+                    <a href="{% url 'app:detail' app.id %}" title="{% trans 'Go to' %} {{ app.name }}" class="float-end">
+                        {% bs_icon 'clipboard-data' %}
                     </a>
                 </h5>
             </div>
@@ -54,6 +54,9 @@
                 {% endif %}
             </div>
             <div class="card-footer">
+                <a href="{% url 'app:update' app.id %}" title="{% trans 'Go to' %} {{ app.name }}" class="float-start">
+                    {% bs_icon 'arrow-clockwise' %}
+                </a>
                 <small class="text-muted">
                     {% trans 'Updated' %}
                     {{ app.last_update|naturaltime }}

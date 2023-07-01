@@ -1,9 +1,19 @@
 .card-img-top {
     height: 200px;
-    width: 200px;
+    width: auto;
     padding: 5px;
 }
 
 .status {
     border-radius: 5px;
+}
+
+.ok {
+    color: white;
+    background-color: green;
+}
+
+.error {
+    color: white;
+    background-color: red;
 }
