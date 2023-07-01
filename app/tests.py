@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib import auth
+from django.utils.timezone import now
 from faker import Faker
 
 from app.models import Application
@@ -28,13 +29,21 @@ class ApplicationTest(TestCase):
         self.assertEqual(str(self.app), self.app.name)
 
     def test_app_get_http_status(self):
-        self.assertEqual(self.app.get_http_status(), (200, 'OK'))
+        self.assertEqual(self.app.get_http_status(), 200)
 
     def test_app_get_health_check_data(self):
         self.assertEqual(
             self.app.get_health_check_data(),
-            None
+            {}
         )
+
+    def test_app_update_status(self):
+        self.app.bg_update = True
+        self.app.save()
+        self.app.refresh_from_db()
+        self.app.update_status()
+        self.assertEqual(self.app.http_status, 200)
+        self.assertEqual(self.app.last_update.date(), now().date())
 
     def test_application_list(self):
         self.client.force_login(self.admin)
@@ -45,5 +54,3 @@ class ApplicationTest(TestCase):
             response.context['application_list'],
             Application.objects.all(),
         )
-        self.assertEqual(response.context['application_list'][0].code, 200)
-

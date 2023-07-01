@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-30 17:38+0200\n"
+"POT-Creation-Date: 2023-07-01 11:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: management/commands/status_update.py:6
+msgid "Update status of apps with background update True"
+msgstr ""
+
 #: models.py:17
 msgid "Application"
 msgstr "Anwendung"
@@ -25,22 +30,54 @@ msgstr "Anwendung"
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: models.py:34
+#: models.py:41
 msgid "Name"
 msgstr ""
 
-#: models.py:35
+#: models.py:42
 msgid "URL"
 msgstr ""
 
-#: models.py:37
+#: models.py:44
 msgid "Administrators"
 msgstr "Administratoren"
 
-#: models.py:40
+#: models.py:47
 msgid "Logo"
 msgstr ""
 
-#: models.py:44
+#: models.py:51
 msgid "Notify by email"
 msgstr "Benachrichtigung per E-Mail"
+
+#: models.py:54
+msgid "Use Django health check"
+msgstr "Django health check verwednen"
+
+#: models.py:57
+msgid "Use Django Prometheus metrics"
+msgstr "Django Prometheus metrics verwenden"
+
+#: models.py:60
+msgid "Update in background"
+msgstr "Im Hintergrund aktualisieren"
+
+#: models.py:62
+msgid "Last update"
+msgstr "Letzte Aktualisierung"
+
+#: models.py:65
+msgid "HTTP Status"
+msgstr ""
+
+#: models.py:68
+msgid "Health Check Status"
+msgstr ""
+
+#: templates/app/application_list.html:21
+msgid "Go to"
+msgstr "Gehe zu"
+
+#: templates/app/application_list.html:51
+msgid "Last updated"
+msgstr "Zuletzt aktualisiert"

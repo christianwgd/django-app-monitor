@@ -8,9 +8,4 @@ class AppList(LoginRequiredMixin, ListView):
     model = Application
 
     def get_queryset(self):
-        apps = Application.objects.filter(admins=self.request.user)
-        for app in apps:
-            app.code, app.text = app.get_http_status()
-            if app.use_health_check:
-                app.detail = app.get_health_check_data()
-        return apps
+        return Application.objects.filter(admins=self.request.user)

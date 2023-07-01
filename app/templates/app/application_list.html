@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static django_bootstrap5 bootstrap_icons %}
+{% load i18n static django_bootstrap5 bootstrap_icons humanize %}
 
 {% block bootstrap5_extra_head %}
 {{ block.super }}
@@ -31,12 +31,12 @@
                 {% endif %}
             </div>
             <div class="card-body text-center bg-white">
-                <div class="status {% if app.code == 200 %}text-bg-success{% else %}text-bg-danger{% endif %}">
-                    Status: {{ app.code }} {{ app.text }}
+                <div class="status {% if app.http_status == 200 %}text-bg-success{% else %}text-bg-danger{% endif %}">
+                    Status: {{ app.http_status }} {{ app.get_http_status_text }}
                 </div>
                 {% if app.use_health_check %}
                 <p class="mt-2">
-                {% for key, value in app.detail.items %}
+                {% for key, value in app.health_check.items %}
                     {% if value == 'working' %}
                         <span class="badge text-bg-success">{{ key }}</span>
                     {% else %}
@@ -47,7 +47,10 @@
                 {% endif %}
             </div>
             <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted">
+                    {% trans 'Last updated' %}
+                    {{ app.last_update|naturaltime }}
+                </small>
             </div>
         </div>
     </div>
