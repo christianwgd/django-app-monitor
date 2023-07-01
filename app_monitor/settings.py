@@ -129,6 +129,9 @@ LOGIN_URL = reverse_lazy('frontend_auth:login')
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
+# bootstrap-icons
+BS_ICONS_CACHE = os.path.join(STATIC_ROOT, 'icon_cache')
+
 ##################
 # LOCAL SETTINGS #
 ##################
