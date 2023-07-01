@@ -10,6 +10,7 @@
 <meta name="msapplication-TileColor" content="#2d89ef">
 <meta name="theme-color" content="#ffffff">
 <link rel="stylesheet" href="{% static "app_monitor/css/style.css" %}">
+<link rel="stylesheet" href="{% static "app_monitor/css/messages.css" %}">
 <link rel="stylesheet" href="{% static 'bootstrap_icons/css/bootstrap_icons.css' %}" />
 {% endblock %}
 
@@ -62,7 +63,7 @@
     </div>
 </nav>
 
-<div class="container-fluid mt-1" id="id_content">
+<div class="container-fluid" id="id_content">
     <div class="row">
         <div class="col-12">
             {% bootstrap_messages %}

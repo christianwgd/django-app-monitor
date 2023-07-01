@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 11:53+0200\n"
+"POT-Creation-Date: 2023-07-01 15:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,58 +26,68 @@ msgstr ""
 msgid "Application"
 msgstr "Anwendung"
 
-#: models.py:18 templates/app/application_list.html:9
+#: models.py:18 templates/app/application_list.html:13
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: models.py:41
+#: models.py:47
 msgid "Name"
 msgstr ""
 
-#: models.py:42
+#: models.py:48
 msgid "URL"
 msgstr ""
 
-#: models.py:44
+#: models.py:50
 msgid "Administrators"
 msgstr "Administratoren"
 
-#: models.py:47
+#: models.py:53
 msgid "Logo"
 msgstr ""
 
-#: models.py:51
+#: models.py:57
 msgid "Notify by email"
 msgstr "Benachrichtigung per E-Mail"
 
-#: models.py:54
+#: models.py:60
 msgid "Use Django health check"
 msgstr "Django health check verwednen"
 
-#: models.py:57
+#: models.py:63
 msgid "Use Django Prometheus metrics"
 msgstr "Django Prometheus metrics verwenden"
 
-#: models.py:60
+#: models.py:66
 msgid "Update in background"
 msgstr "Im Hintergrund aktualisieren"
 
-#: models.py:62
+#: models.py:68
 msgid "Last update"
 msgstr "Letzte Aktualisierung"
 
-#: models.py:65
+#: models.py:71
 msgid "HTTP Status"
 msgstr ""
 
-#: models.py:68
+#: models.py:74
 msgid "Health Check Status"
 msgstr ""
 
-#: templates/app/application_list.html:21
+#: templates/app/application_list.html:25
+#: templates/app/application_list.html:28
 msgid "Go to"
 msgstr "Gehe zu"
 
-#: templates/app/application_list.html:51
-msgid "Last updated"
-msgstr "Zuletzt aktualisiert"
+#: templates/app/application_list.html:58
+msgid "Updated"
+msgstr "Aktualisiert"
+
+#: views.py:24
+#, python-brace-format
+msgid "App status updated for {name}"
+msgstr "Status für {name} aktualisiert"
+
+#: views.py:34
+msgid "App status updated for all applications"
+msgstr "Status für alle Anwendung aktualisiert"
