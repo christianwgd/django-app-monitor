@@ -30,6 +30,7 @@ class Application(models.Model):
         r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
         if r.status_code == 200:
             return r.json()
+        return None
 
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     url = models.URLField(verbose_name=_('URL'))
