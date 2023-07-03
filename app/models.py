@@ -85,7 +85,11 @@ class Application(models.Model):
     bg_update = models.BooleanField(
         verbose_name=_('Update in background'), default=False
     )
-    last_update = models.DateTimeField(auto_now=True, verbose_name=_('Last update'))
+    last_update = models.DateTimeField(
+        auto_now=True, verbose_name=_('Last update'),
+        null=True, blank=True
+
+    )
 
     http_status = models.PositiveIntegerField(
         verbose_name=_('HTTP Status'), null=True, blank=True
