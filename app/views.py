@@ -67,10 +67,8 @@ class ValuesJSONView(BaseLineChartView):
         return [self.value_name]
 
     def get_labels(self):
-        labels = [formats.date_format(item.timestamp, 'j.n.y H:i') for item in self.queryset]
-        return labels
+        return [formats.date_format(item.timestamp, 'j.n.y H:i') for item in self.queryset]
 
     def get_data(self):
         # values = [[round(item.cpu_time, 2) for item in self.queryset]]
-        values = [[round(getattr(item, self.value_name), 2) for item in self.queryset]]
-        return values
+        return [[round(getattr(item, self.value_name), 2) for item in self.queryset]]
