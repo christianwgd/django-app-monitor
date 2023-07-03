@@ -8,13 +8,24 @@
 
 {% block bootstrap5_extra_script %}
 {{ block.super }}
+<script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+<script type="text/javascript">
+    {% for name in value_names %}
+    $.get('{% url "app:chart" application.id name %}', function(data) {
+        let ctx = $("#{{ name }}_chart").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line',
+            data: data
+        });
+    });
+    {% endfor %}
+</script>
 {% endblock %}
 
 {% block page_title %}Status {{ application.name }}{% endblock %}
 
-
 {% block content %}
-
 <table class="table">
     <thead>
         <tr>
@@ -37,5 +48,11 @@
     </tbody>
 </table>
 
-
+<div class="row">
+    {% for name in value_names %}
+    <div class="col-md-6 col-sm-12">
+        <canvas id="{{ name }}_chart" width="600" height="200"></canvas>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -52,7 +52,7 @@ msgstr "Benachrichtigung per E-Mail"
 
 #: models.py:60
 msgid "Use Django health check"
-msgstr "Django health check verwednen"
+msgstr "Django health check verwenden"
 
 #: models.py:63
 msgid "Use Django Prometheus metrics"

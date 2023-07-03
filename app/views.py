@@ -2,11 +2,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils import formats
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
+from chartjs.views.lines import BaseLineChartView
 
-from app.models import Application
+from app.models import Application, ProcessMetric
 
 
 class AppList(LoginRequiredMixin, ListView):
@@ -21,6 +23,13 @@ class AppDetail(UserPassesTestMixin, DetailView):
 
     def test_func(self):
         return self.request.user in self.get_object().admins.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['value_names'] = [
+            'cpu_time', 'cpu_percent', 'mem_vrt', 'mem_rss', 'mem_percent'
+        ]
+        return context
 
 
 @require_http_methods(["GET"])
@@ -40,3 +49,28 @@ def instant_update_all(request):
         app.update_status()
     messages.success(request, _('App status updated for all applications'))
     return redirect(reverse('app:list'))
+
+
+class ValuesJSONView(BaseLineChartView):
+    value_name = None
+    queryset = None
+
+    def get(self, request, *args, **kwargs):
+        self.value_name = kwargs.get('name')
+        app = Application.objects.get(id=kwargs.get('app_id'))
+        self.queryset = ProcessMetric.objects.filter(
+            app=app,
+        ).order_by('timestamp')
+        return super().get(request, *args, **kwargs)
+
+    def get_providers(self):
+        return [self.value_name]
+
+    def get_labels(self):
+        labels = [formats.date_format(item.timestamp, 'j.n.y H:i') for item in self.queryset]
+        return labels
+
+    def get_data(self):
+        # values = [[round(item.cpu_time, 2) for item in self.queryset]]
+        values = [[round(getattr(item, self.value_name), 2) for item in self.queryset]]
+        return values

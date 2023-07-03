@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'frontend_auth',
     'app',
     'app_monitor',
+    'chartjs',
     'django_bootstrap5',
     'django_bootstrap_icons',
 ]
