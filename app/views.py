@@ -1,8 +1,11 @@
+from datetime import timedelta
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import formats
+from django.utils.timezone import now
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
@@ -58,8 +61,9 @@ class ValuesJSONView(BaseLineChartView):
     def get(self, request, *args, **kwargs):
         self.value_name = kwargs.get('name')
         app = Application.objects.get(id=kwargs.get('app_id'))
+        from_time = now() - timedelta(hours=24)
         self.queryset = ProcessMetric.objects.filter(
-            app=app,
+            app=app, timestamp__gte=from_time
         ).order_by('timestamp')
         return super().get(request, *args, **kwargs)
 
@@ -67,7 +71,7 @@ class ValuesJSONView(BaseLineChartView):
         return [self.value_name]
 
     def get_labels(self):
-        return [formats.date_format(item.timestamp, 'j.n.y H:i') for item in self.queryset]
+        return [formats.date_format(item.timestamp, 'H:i') for item in self.queryset]
 
     def get_data(self):
         # values = [[round(item.cpu_time, 2) for item in self.queryset]]
