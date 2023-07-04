@@ -14,7 +14,7 @@ class Command(BaseCommand):
         for app in apps:
             app.update_status()
             if not app.is_working():
-                if not app.alert_sent:
+                if not app.alert_sent and app.notify_by_email:
                     subject = _('Monitoring Alert: {name}').format(name=app.name)
                     message = _(
                         'Please check service {name} {url}'

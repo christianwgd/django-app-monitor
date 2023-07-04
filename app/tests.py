@@ -78,6 +78,7 @@ class ApplicationTest(TestCase):
 
     def test_app_call_command_status_update(self):
         self.app.bg_update = True
+        self.app.notify_by_email = True
         # Set some invalid url to get a 404
         self.app.url += '/ht/'
         self.app.save()
@@ -95,6 +96,20 @@ class ApplicationTest(TestCase):
             f'Please check service {self.app.name} {self.app.url}'
         )
         self.assertTrue(self.app.alert_sent)
+
+    def test_app_call_command_status_update_no_email(self):
+        self.app.bg_update = True
+        self.app.notify_by_email = False
+        # Set some invalid url to get a 404
+        self.app.url += '/ht/'
+        self.app.save()
+        self.app.refresh_from_db()
+        call_command('status_update')
+        self.app.refresh_from_db()
+        self.assertEqual(self.app.http_status, 404)
+        self.assertEqual(self.app.last_update.date(), now().date())
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertFalse(self.app.alert_sent)
 
     def test_app_call_command_status_update_not_sent_twice(self):
         self.app.bg_update = True
