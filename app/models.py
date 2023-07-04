@@ -24,7 +24,10 @@ class Application(models.Model):
         return self.name
 
     def get_http_status(self):
-        r = requests.get(f'{self.url}/', timeout=20)
+        try:
+            r = requests.get(f'{self.url}/', timeout=10)
+        except requests.exceptions.ConnectionError:
+            return 408
         return r.status_code
 
     @property
@@ -35,26 +38,32 @@ class Application(models.Model):
 
     def get_health_check_data(self):
         headers = {'Accept': 'application/json'}
-        r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
-        if r.status_code == 200:
-            return r.json()
+        try:
+            r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
+            if r.status_code == 200:
+                return r.json()
+        except requests.exceptions.ConnectionError:
+            pass
         return {}
 
     def create_process_metric(self):
         token = getattr(settings, 'PROCESS_METRICS_TOKEN', None)
         if token:
-            headers = {'Accept': 'application/json', 'token': token}
-            r = requests.get(f'{self.url}/process/metrics/', headers=headers, timeout=20)
-            if r.status_code == 200:
-                json_metrics = r.json()
-                ProcessMetric.objects.create(
-                    app=self,
-                    cpu_time=sum(json_metrics['cpu_times']),
-                    cpu_percent=json_metrics['cpu_percent'],
-                    mem_vrt=json_metrics['memory_info'][1],
-                    mem_rss=json_metrics['memory_info'][0],
-                    mem_percent=json_metrics['memory_percent'],
-                )
+            try:
+                headers = {'Accept': 'application/json', 'token': token}
+                r = requests.get(f'{self.url}/process/metrics/', headers=headers, timeout=20)
+                if r.status_code == 200:
+                    json_metrics = r.json()
+                    ProcessMetric.objects.create(
+                        app=self,
+                        cpu_time=sum(json_metrics['cpu_times']),
+                        cpu_percent=json_metrics['cpu_percent'],
+                        mem_vrt=json_metrics['memory_info'][1],
+                        mem_rss=json_metrics['memory_info'][0],
+                        mem_percent=json_metrics['memory_percent'],
+                    )
+            except requests.exceptions.ConnectionError:
+                pass
 
     def update_status(self):
         self.http_status = self.get_http_status()
