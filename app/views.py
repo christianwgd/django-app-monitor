@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import formats
@@ -72,3 +74,18 @@ class ValuesJSONView(BaseLineChartView):
     def get_data(self):
         # values = [[round(item.cpu_time, 2) for item in self.queryset]]
         return [[round(getattr(item, self.value_name), 2) for item in self.queryset]]
+
+
+def send_test_email(request):
+    subject = 'Test Mail from App Monitor'
+    message = 'no text'
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'wgdsrv@wgdnet.de')
+    recipient_list = ['cwiegand@wgdnet.de']
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=from_email,
+        recipient_list=recipient_list,
+        fail_silently=False
+    )
+    return redirect(reverse('app:list'))

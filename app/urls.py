@@ -11,4 +11,5 @@ urlpatterns = [
     path('update/<int:app_id>/', views.instant_update, name='update'),
     path('update-all/', views.instant_update_all, name='update-all'),
     path('chart/<int:app_id>/<str:name>/', views.ValuesJSONView.as_view(), name='chart'),
+    path('mail/', views.send_test_email, name='mail'),
 ]
