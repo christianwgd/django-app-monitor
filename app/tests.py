@@ -1,3 +1,5 @@
+from django.core import mail
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib import auth
@@ -17,7 +19,8 @@ class ApplicationTest(TestCase):
         Faker.seed(0)
 
         self.admin = User.objects.create(
-            username=self.fake.user_name()
+            username=self.fake.user_name(),
+            email=self.fake.email(),
         )
         self.app = Application.objects.create(
             name=self.fake.word(),
@@ -37,6 +40,34 @@ class ApplicationTest(TestCase):
             {}
         )
 
+    def test_is_working_true(self):
+        self.app.http_status = 200
+        self.app.health_check = {
+            "DiskUsage": "working", "MemoryUsage": "working",
+            "DatabaseBackend": "working", "MigrationsHealthCheck": "working"
+        }
+        self.app.use_health_check = True
+        self.app.save()
+        self.app.refresh_from_db()
+        self.assertTrue(self.app.is_working())
+
+    def test_is_working_false_http_status(self):
+        self.app.http_status = 404
+        self.app.save()
+        self.app.refresh_from_db()
+        self.assertFalse(self.app.is_working())
+
+    def test_is_working_false_health_check(self):
+        self.app.http_status = 200
+        self.app.health_check = {
+            "DiskUsage": "working", "MemoryUsage": "working",
+            "DatabaseBackend": "error", "MigrationsHealthCheck": "working"
+        }
+        self.app.use_health_check = True
+        self.app.save()
+        self.app.refresh_from_db()
+        self.assertFalse(self.app.is_working())
+
     def test_app_update_status(self):
         self.app.bg_update = True
         self.app.save()
@@ -44,6 +75,39 @@ class ApplicationTest(TestCase):
         self.app.update_status()
         self.assertEqual(self.app.http_status, 200)
         self.assertEqual(self.app.last_update.date(), now().date())
+
+    def test_app_call_command_status_update(self):
+        self.app.bg_update = True
+        # Set some invalid url to get a 404
+        self.app.url += '/ht/'
+        self.app.save()
+        self.app.refresh_from_db()
+        call_command('status_update')
+        self.app.refresh_from_db()
+        self.assertEqual(self.app.http_status, 404)
+        self.assertEqual(self.app.last_update.date(), now().date())
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(
+            mail.outbox[0].subject, f'Monitoring Alert: {self.app.name}'
+        )
+        self.assertEqual(
+            mail.outbox[0].body,
+            f'Please check service {self.app.name} {self.app.url}'
+        )
+        self.assertTrue(self.app.alert_sent)
+
+    def test_app_call_command_status_update_not_sent_twice(self):
+        self.app.bg_update = True
+        # Set some invalid url to get a 404
+        self.app.url += '/ht/'
+        self.app.alert_sent = True
+        self.app.save()
+        self.app.refresh_from_db()
+        call_command('status_update')
+        self.app.refresh_from_db()
+        self.assertEqual(self.app.http_status, 404)
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertTrue(self.app.alert_sent)
 
     def test_application_list(self):
         self.client.force_login(self.admin)

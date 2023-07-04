@@ -56,13 +56,22 @@ class Application(models.Model):
                     mem_percent=json_metrics['memory_percent'],
                 )
 
-    def update_status(self, bg_only=True):
+    def update_status(self):
         self.http_status = self.get_http_status()
-        if self.use_health_check or not bg_only:
+        if self.use_health_check:
             self.health_check = self.get_health_check_data()
         if self.use_metrics:
             self.create_process_metric()
         self.save()
+
+    def is_working(self):
+        if self.http_status != 200:
+            return False
+        if self.use_health_check:
+            for _key, value in self.health_check.items():
+                if value != 'working':
+                    return False
+        return True
 
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     url = models.URLField(verbose_name=_('URL'))
@@ -88,7 +97,6 @@ class Application(models.Model):
     last_update = models.DateTimeField(
         auto_now=True, verbose_name=_('Last update'),
         null=True, blank=True
-
     )
 
     http_status = models.PositiveIntegerField(
@@ -96,6 +104,16 @@ class Application(models.Model):
     )
     health_check = models.JSONField(
         verbose_name=_('Health Check Status'), null=True, blank=True
+    )
+
+    max_cpu_percent = models.FloatField(
+        verbose_name=_('Max. CPU Percentage'), default=80.0
+    )
+    max_mem_percent = models.FloatField(
+        verbose_name=_('Max. Memory Percentage'), default=80.0
+    )
+    alert_sent = models.BooleanField(
+        verbose_name=_('Alert sent'), default=False
     )
 
 
