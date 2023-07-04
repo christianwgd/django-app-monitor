@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:10+0200\n"
+"POT-Creation-Date: 2023-07-04 15:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,76 +18,131 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: management/commands/status_update.py:6
+#: management/commands/status_update.py:9
 msgid "Update status of apps with background update True"
+msgstr "Status-Aktualisierugen für Anwendungen mit Hintergrund-Aktualisierungen"
+
+#: management/commands/status_update.py:18
+#, python-brace-format
+msgid "Monitoring Alert: {name}"
 msgstr ""
 
-#: models.py:17
+#: management/commands/status_update.py:20
+#, python-brace-format
+msgid "Please check service {name} at {url}."
+msgstr "Prüfen Sie den Service {name} unter {url}"
+
+#: models.py:19 models.py:140
 msgid "Application"
 msgstr "Anwendung"
 
-#: models.py:18 templates/app/application_list.html:13
+#: models.py:20 templates/app/application_list.html:13
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: models.py:47
+#: models.py:85
 msgid "Name"
 msgstr ""
 
-#: models.py:48
+#: models.py:86
 msgid "URL"
 msgstr ""
 
-#: models.py:50
+#: models.py:88
 msgid "Administrators"
 msgstr "Administratoren"
 
-#: models.py:53
+#: models.py:91
 msgid "Logo"
 msgstr ""
 
-#: models.py:57
+#: models.py:95
 msgid "Notify by email"
 msgstr "Benachrichtigung per E-Mail"
 
-#: models.py:60
+#: models.py:98
 msgid "Use Django health check"
 msgstr "Django health check verwenden"
 
-#: models.py:63
-msgid "Use Django Prometheus metrics"
-msgstr "Django Prometheus metrics verwenden"
+#: models.py:101
+msgid "Use psutil metrics"
+msgstr "psutil Metriken verwenden"
 
-#: models.py:66
+#: models.py:104
 msgid "Update in background"
 msgstr "Im Hintergrund aktualisieren"
 
-#: models.py:68
+#: models.py:107
 msgid "Last update"
 msgstr "Letzte Aktualisierung"
 
-#: models.py:71
+#: models.py:112
 msgid "HTTP Status"
 msgstr ""
 
-#: models.py:74
+#: models.py:115
 msgid "Health Check Status"
 msgstr ""
 
+#: models.py:119
+msgid "Max. CPU Percentage"
+msgstr "Max. CPU Verbrauch in Prozent"
+
+#: models.py:122
+msgid "Max. Memory Percentage"
+msgstr "Max. Speicherbelegung in Prozent"
+
+#: models.py:125
+msgid "Alert sent"
+msgstr "Alarm gesendet"
+
+#: models.py:135
+msgid "Process metric"
+msgstr "Prozess Metrik"
+
+#: models.py:136
+msgid "Process metrics"
+msgstr "Prozess Metriken"
+
+#: models.py:139
+msgid "Timestamp"
+msgstr "Zeitstempel"
+
+#: models.py:141
+msgid "CPU time"
+msgstr "CPU Zeit"
+
+#: models.py:142
+msgid "CPU percent"
+msgstr "CPU Prozent"
+
+#: models.py:143
+msgid "Memory (resident)"
+msgstr "Speicherbelegung (physisch)"
+
+#: models.py:144
+msgid "Memory (virtual)"
+msgstr "Speicherbelegung (virtuell)"
+
+#: models.py:145
+msgid "Memnory percent"
+msgstr "Speicherbelegung in Prozent"
+
 #: templates/app/application_list.html:25
 #: templates/app/application_list.html:28
+#: templates/app/application_list.html:57
 msgid "Go to"
 msgstr "Gehe zu"
 
-#: templates/app/application_list.html:58
+#: templates/app/application_list.html:61
 msgid "Updated"
 msgstr "Aktualisiert"
 
-#: views.py:24
+#: views.py:40
 #, python-brace-format
 msgid "App status updated for {name}"
 msgstr "Status für {name} aktualisiert"
 
-#: views.py:34
+#: views.py:50
 msgid "App status updated for all applications"
 msgstr "Status für alle Anwendung aktualisiert"

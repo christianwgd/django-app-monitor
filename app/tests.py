@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib import auth
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 from faker import Faker
 
 from app.models import Application
@@ -91,10 +92,10 @@ class ApplicationTest(TestCase):
         self.assertEqual(
             mail.outbox[0].subject, f'Monitoring Alert: {self.app.name}'
         )
-        self.assertEqual(
-            mail.outbox[0].body,
-            f'Please check service {self.app.name} {self.app.url}'
-        )
+        message = _(
+            'Please check service {name} at {url}.'
+        ).format(name=self.app.name, url=self.app.url)
+        self.assertEqual(mail.outbox[0].body, message)
         self.assertTrue(self.app.alert_sent)
 
     def test_app_call_command_status_update_no_email(self):
