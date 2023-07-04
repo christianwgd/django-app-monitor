@@ -48,6 +48,7 @@
     </tbody>
 </table>
 
+{% if application.use_metrics %}
 <div class="row">
     {% for name in value_names %}
     <div class="col-md-6 col-sm-12">
@@ -55,4 +56,5 @@
     </div>
     {% endfor %}
 </div>
+{% endif %}
 {% endblock %}
