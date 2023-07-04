@@ -81,11 +81,15 @@ def send_test_email(request):
     message = 'no text'
     from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'wgdsrv@wgdnet.de')
     recipient_list = ['cwiegand@wgdnet.de']
-    send_mail(
-        subject=subject,
-        message=message,
-        from_email=from_email,
-        recipient_list=recipient_list,
-        fail_silently=False
-    )
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=from_email,
+            recipient_list=recipient_list,
+            fail_silently=False
+        )
+    except:
+        import traceback
+        traceback.print_exc()
     return redirect(reverse('app:list'))
