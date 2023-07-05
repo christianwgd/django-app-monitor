@@ -11,4 +11,5 @@ class ApplicationPostAdmin(admin.ModelAdmin):
 
 @admin.register(ProcessMetric)
 class ProcessMetricAdmin(admin.ModelAdmin):
-    list_display = ['timestamp', 'cpu_time', 'cpu_percent', 'mem_rss', 'mem_percent']
+    list_display = ['timestamp', 'app', 'cpu_time', 'mem_rss']
+    list_filter = ['app']

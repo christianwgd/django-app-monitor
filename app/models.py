@@ -115,11 +115,20 @@ class Application(models.Model):
         verbose_name=_('Health Check Status'), null=True, blank=True
     )
 
+    max_cpu_time = models.FloatField(
+        verbose_name=_('Max. CPU Time'), default=80.0
+    )
     max_cpu_percent = models.FloatField(
-        verbose_name=_('Max. CPU Percentage'), default=80.0
+        verbose_name=_('Max. CPU Percentage'), default=0.8
+    )
+    max_mem_rss = models.FloatField(
+        verbose_name=_('Max. Memory (resident)'), default=5000000000.0
+    )
+    max_mem_vrt = models.FloatField(
+        verbose_name=_('Max. Memory (virtual)'), default=5000000000.0
     )
     max_mem_percent = models.FloatField(
-        verbose_name=_('Max. Memory Percentage'), default=80.0
+        verbose_name=_('Max. Memory Percentage'), default=0.8
     )
     alert_sent = models.BooleanField(
         verbose_name=_('Alert sent'), default=False
@@ -137,7 +146,10 @@ class ProcessMetric(models.Model):
         ordering = ['timestamp']
 
     timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
-    app = models.ForeignKey(Application, on_delete=models.CASCADE, verbose_name=_('Application'))
+    app = models.ForeignKey(
+        Application, verbose_name=_('Application'),
+        related_name='metrics', on_delete=models.CASCADE,
+    )
     cpu_time = models.FloatField(verbose_name=_('CPU time'), default=0.0)
     cpu_percent = models.FloatField(verbose_name=_('CPU percent'), default=0.0)
     mem_rss = models.FloatField(verbose_name=_('Memory (resident)'), default=0.0)

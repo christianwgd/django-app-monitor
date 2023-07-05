@@ -42,14 +42,14 @@
 <h6 class="float-end">Letzte Aktualisierung: {{ application.last_update }}</h6>
 <div class="row">
     <div class="col-sm-12">
-        <div class="card text-center border-{% if value == 200 %}success{% else %}danger{% endif %}">
+        <div class="card text-center border-{% http_status_color application.http_status %}">
             <div class="card-header">
                 <h5 class="mt-2">HTTP Status</h5>
             </div>
             <div class="card-body">
                 <p class="mb-1">
                     {{ application.http_status }}
-                    <span class="badge text-bg-{% if value == 'working' %}success{% else %}danger{% endif %}">
+                    <span class="badge text-bg-{% http_status_color application.http_status %}">
                         {{ application.get_http_status_text }}
                     </span>
                 </p>
@@ -63,13 +63,13 @@
 <div class="row row-cols-1 row-cols-md-2 g-3">
     {% for key, value in application.health_check.items %}
     <div class="col">
-        <div class="card text-center border-{% if value == 'working' %}success{% else %}danger{% endif %}">
+        <div class="card text-center border-{% health_check_color value %}">
             <div class="card-header">
                 <h5 class="mt-2">{{ key }}</h5>
             </div>
             <div class="card-body">
                 <p class="mb-1">
-                    <span class="badge text-bg-{% if value == 'working' %}success{% else %}danger{% endif %}">
+                    <span class="badge text-bg-{% health_check_color value %}">
                         {{ value }}
                     </span>
                 </p>
@@ -85,9 +85,16 @@
 <div class="row row-cols-1 row-cols-md-2 g-3 mb-3">
     {% for value in value_names %}
     <div class="col">
-        <div class="card text-center border-success">
+        {% metrics_color application value.0 as color %}
+        <div class="card text-center border-{{ color }}">
         <div class="card-header">
-                <h5 class="mt-2">{{ value.0|label }}</h5>
+                <h5 class="mt-2">
+                    {{ value.0|label }}
+                    {% metrics_icon application value.0 as icon %}
+                    {% if icon %}
+                    <span class="text-{{ color }}">{% bs_icon icon %}</span>
+                    {% endif %}
+                </h5>
             </div>
             <div class="card-body">
                 <canvas id="{{ value.0 }}_chart" width="600" height="200"></canvas>

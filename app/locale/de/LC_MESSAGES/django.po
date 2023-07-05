@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-04 15:34+0200\n"
+"POT-Creation-Date: 2023-07-05 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,19 +20,20 @@ msgstr ""
 
 #: management/commands/status_update.py:9
 msgid "Update status of apps with background update True"
-msgstr "Status-Aktualisierugen für Anwendungen mit Hintergrund-Aktualisierungen"
+msgstr ""
+"Status-Aktualisierugen für Anwendungen mit Hintergrund-Aktualisierungen"
 
 #: management/commands/status_update.py:18
 #, python-brace-format
 msgid "Monitoring Alert: {name}"
 msgstr ""
 
-#: management/commands/status_update.py:20
+#: management/commands/status_update.py:20 tests.py:96
 #, python-brace-format
 msgid "Please check service {name} at {url}."
 msgstr "Prüfen Sie den Service {name} unter {url}"
 
-#: models.py:19 models.py:140
+#: models.py:19 models.py:150
 msgid "Application"
 msgstr "Anwendung"
 
@@ -85,64 +86,80 @@ msgid "Health Check Status"
 msgstr ""
 
 #: models.py:119
+msgid "Max. CPU Time"
+msgstr "Max. CPU Zeit"
+
+#: models.py:122
 msgid "Max. CPU Percentage"
 msgstr "Max. CPU Verbrauch in Prozent"
 
-#: models.py:122
+#: models.py:125
+msgid "Max. Memory (resident)"
+msgstr "Max. Speicherbelegung (physisch)"
+
+#: models.py:128
+msgid "Max. Memory (virtual)"
+msgstr "Max. Speicherbelegung (virtuell)"
+
+#: models.py:131
 msgid "Max. Memory Percentage"
 msgstr "Max. Speicherbelegung in Prozent"
 
-#: models.py:125
+#: models.py:134
 msgid "Alert sent"
 msgstr "Alarm gesendet"
 
-#: models.py:135
+#: models.py:144
 msgid "Process metric"
 msgstr "Prozess Metrik"
 
-#: models.py:136
+#: models.py:145 templates/app/application_detail.html:84
 msgid "Process metrics"
 msgstr "Prozess Metriken"
 
-#: models.py:139
+#: models.py:148
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: models.py:141
+#: models.py:153
 msgid "CPU time"
 msgstr "CPU Zeit"
 
-#: models.py:142
+#: models.py:154
 msgid "CPU percent"
 msgstr "CPU Prozent"
 
-#: models.py:143
+#: models.py:155
 msgid "Memory (resident)"
 msgstr "Speicherbelegung (physisch)"
 
-#: models.py:144
+#: models.py:156
 msgid "Memory (virtual)"
 msgstr "Speicherbelegung (virtuell)"
 
-#: models.py:145
+#: models.py:157
 msgid "Memnory percent"
 msgstr "Speicherbelegung in Prozent"
 
-#: templates/app/application_list.html:25
-#: templates/app/application_list.html:28
-#: templates/app/application_list.html:57
+#: templates/app/application_detail.html:62
+msgid "Health Check"
+msgstr ""
+
+#: templates/app/application_list.html:24
+#: templates/app/application_list.html:27
+#: templates/app/application_list.html:56
 msgid "Go to"
 msgstr "Gehe zu"
 
-#: templates/app/application_list.html:61
+#: templates/app/application_list.html:60
 msgid "Updated"
 msgstr "Aktualisiert"
 
-#: views.py:40
+#: views.py:44
 #, python-brace-format
 msgid "App status updated for {name}"
 msgstr "Status für {name} aktualisiert"
 
-#: views.py:50
+#: views.py:54
 msgid "App status updated for all applications"
 msgstr "Status für alle Anwendung aktualisiert"
