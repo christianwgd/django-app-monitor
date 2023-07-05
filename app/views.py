@@ -30,7 +30,8 @@ class AppDetail(UserPassesTestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['value_names'] = [
-            'cpu_time', 'cpu_percent', 'mem_vrt', 'mem_rss', 'mem_percent'
+            ('cpu_time', 'ms'), ('cpu_percent', ''),
+            ('mem_vrt', 'Gb'), ('mem_rss', 'Gb'), ('mem_percent', '')
         ]
         return context
 
@@ -74,5 +75,6 @@ class ValuesJSONView(BaseLineChartView):
         return [formats.date_format(item.timestamp, 'H:i') for item in self.queryset]
 
     def get_data(self):
-        # values = [[round(item.cpu_time, 2) for item in self.queryset]]
+        if self.value_name in ['mem_vrt', 'mem_rss']:
+            return [[round(getattr(item, self.value_name)*0.00000001, 2) for item in self.queryset]]
         return [[round(getattr(item, self.value_name), 2) for item in self.queryset]]
