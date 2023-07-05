@@ -8,6 +8,7 @@
 
 {% block bootstrap5_extra_script %}
 {{ block.super }}
+{% if application.use_metrics %}
 <script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
 <script type="text/javascript">
@@ -21,38 +22,66 @@
     });
     {% endfor %}
 </script>
+{% endif %}
 {% endblock %}
 
 {% block page_title %}Status {{ application.name }}{% endblock %}
 
 {% block content %}
-<table class="table">
-    <thead>
-        <tr>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="{% if application.http_status == 200 %}ok{% else %}error{% endif %}">
-            <td>HTTP Status</td>
-            <td>{{ application.http_status }} {{ application.get_http_status_text }}</td>
-        </tr>
-        {% if application.health_check %}
-        <tr><td class="text-center" colspan="2">Health Check</td></tr>
-        {% for key, value in application.health_check.items %}
-            <tr class="{% if value == 'working' %}ok{% else %}error{% endif %}">
-                <td>{{ key }}</td>
-                <td>{{ value }}</td>
-            </tr>
-        {% endfor %}
-        {% endif %}
-    </tbody>
-</table>
+<h6 class="float-end">Letzte Aktualisierung: {{ application.last_update }}</h6>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card text-center border-{% if value == 200 %}success{% else %}danger{% endif %}">
+            <div class="card-header">
+                <h5 class="mt-2">HTTP Status</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-1">
+                    {{ application.http_status }}
+                    <span class="badge text-bg-{% if value == 'working' %}success{% else %}danger{% endif %}">
+                        {{ application.get_http_status_text }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if application.health_check %}
+<h4 class="text-center mt-5">{% trans 'Health Check' %}</h4>
+<div class="row row-cols-1 row-cols-md-2 g-3">
+    {% for key, value in application.health_check.items %}
+    <div class="col">
+        <div class="card text-center border-{% if value == 'working' %}success{% else %}danger{% endif %}">
+            <div class="card-header">
+                <h5 class="mt-2">{{ key }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-1">
+                    <span class="badge text-bg-{% if value == 'working' %}success{% else %}danger{% endif %}">
+                        {{ value }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% if application.use_metrics %}
-<div class="row">
+<h4 class="text-center mt-5">{% trans 'Process metrics' %}</h4>
+<div class="row row-cols-1 row-cols-md-2 g-3">
     {% for name in value_names %}
-    <div class="col-md-6 col-sm-12">
-        <canvas id="{{ name }}_chart" width="600" height="200"></canvas>
+    <div class="col">
+        <div class="card text-center border-success">
+        <div class="card-header">
+                <h5 class="mt-2">{{ name }}</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="{{ name }}_chart" width="600" height="200"></canvas>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
