@@ -9,7 +9,6 @@ from django.utils.timezone import now, localtime
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 from chartjs.views.lines import BaseLineChartView
 
 from app.models import Application, ProcessMetric
