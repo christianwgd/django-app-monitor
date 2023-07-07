@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-05 15:04+0200\n"
+"POT-Creation-Date: 2023-07-07 12:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Please check service {name} at {url}."
 msgstr "Prüfen Sie den Service {name} unter {url}"
 
-#: models.py:19 models.py:150
+#: models.py:19 models.py:141
 msgid "Application"
 msgstr "Anwendung"
 
@@ -86,58 +86,34 @@ msgid "Health Check Status"
 msgstr ""
 
 #: models.py:119
-msgid "Max. CPU Time"
-msgstr "Max. CPU Zeit"
-
-#: models.py:122
 msgid "Max. CPU Percentage"
 msgstr "Max. CPU Verbrauch in Prozent"
 
-#: models.py:125
-msgid "Max. Memory (resident)"
-msgstr "Max. Speicherbelegung (physisch)"
-
-#: models.py:128
-msgid "Max. Memory (virtual)"
-msgstr "Max. Speicherbelegung (virtuell)"
-
-#: models.py:131
+#: models.py:122
 msgid "Max. Memory Percentage"
 msgstr "Max. Speicherbelegung in Prozent"
 
-#: models.py:134
+#: models.py:125
 msgid "Alert sent"
 msgstr "Alarm gesendet"
 
-#: models.py:144
-msgid "Process metric"
-msgstr "Prozess Metrik"
+#: models.py:135
+msgid "System metric"
+msgstr "System Metrik"
 
-#: models.py:145 templates/app/application_detail.html:84
-msgid "Process metrics"
-msgstr "Prozess Metriken"
+#: models.py:136 templates/app/application_detail.html:84
+msgid "System metrics"
+msgstr "System Metriken"
 
-#: models.py:148
+#: models.py:139
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: models.py:153
-msgid "CPU time"
-msgstr "CPU Zeit"
-
-#: models.py:154
+#: models.py:144
 msgid "CPU percent"
 msgstr "CPU Prozent"
 
-#: models.py:155
-msgid "Memory (resident)"
-msgstr "Speicherbelegung (physisch)"
-
-#: models.py:156
-msgid "Memory (virtual)"
-msgstr "Speicherbelegung (virtuell)"
-
-#: models.py:157
+#: models.py:145
 msgid "Memnory percent"
 msgstr "Speicherbelegung in Prozent"
 
@@ -155,11 +131,17 @@ msgstr "Gehe zu"
 msgid "Updated"
 msgstr "Aktualisiert"
 
-#: views.py:44
+#: views.py:43
 #, python-brace-format
 msgid "App status updated for {name}"
 msgstr "Status für {name} aktualisiert"
 
-#: views.py:54
+#: views.py:53
 msgid "App status updated for all applications"
 msgstr "Status für alle Anwendung aktualisiert"
+
+#~ msgid "Process metric"
+#~ msgstr "Prozess Metrik"
+
+#~ msgid "Process metrics"
+#~ msgstr "Prozess Metriken"

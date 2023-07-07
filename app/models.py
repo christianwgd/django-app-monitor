@@ -51,16 +51,13 @@ class Application(models.Model):
         if token:
             try:
                 headers = {'Accept': 'application/json', 'token': token}
-                r = requests.get(f'{self.url}/process/metrics/', headers=headers, timeout=20)
+                r = requests.get(f'{self.url}/metrics/', headers=headers, timeout=20)
                 if r.status_code == 200:
                     json_metrics = r.json()
-                    ProcessMetric.objects.create(
+                    SystemMetric.objects.create(
                         app=self,
-                        cpu_time=sum(json_metrics['cpu_times']),
                         cpu_percent=json_metrics['cpu_percent'],
-                        mem_vrt=json_metrics['memory_info'][1],
-                        mem_rss=json_metrics['memory_info'][0],
-                        mem_percent=json_metrics['memory_percent'],
+                        mem_percent=json_metrics['mem_percent'],
                     )
             except requests.exceptions.ConnectionError:
                 pass
@@ -115,17 +112,8 @@ class Application(models.Model):
         verbose_name=_('Health Check Status'), null=True, blank=True
     )
 
-    max_cpu_time = models.FloatField(
-        verbose_name=_('Max. CPU Time'), default=80.0
-    )
     max_cpu_percent = models.FloatField(
         verbose_name=_('Max. CPU Percentage'), default=0.8
-    )
-    max_mem_rss = models.FloatField(
-        verbose_name=_('Max. Memory (resident)'), default=5000000000.0
-    )
-    max_mem_vrt = models.FloatField(
-        verbose_name=_('Max. Memory (virtual)'), default=5000000000.0
     )
     max_mem_percent = models.FloatField(
         verbose_name=_('Max. Memory Percentage'), default=0.8
@@ -135,14 +123,14 @@ class Application(models.Model):
     )
 
 
-class ProcessMetric(models.Model):
+class SystemMetric(models.Model):
     """
     Process metrics from psutil
     """
 
     class Meta:
-        verbose_name = _('Process metric')
-        verbose_name_plural = _('Process metrics')
+        verbose_name = _('System metric')
+        verbose_name_plural = _('System metrics')
         ordering = ['timestamp']
 
     timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
@@ -150,8 +138,5 @@ class ProcessMetric(models.Model):
         Application, verbose_name=_('Application'),
         related_name='metrics', on_delete=models.CASCADE,
     )
-    cpu_time = models.FloatField(verbose_name=_('CPU time'), default=0.0)
     cpu_percent = models.FloatField(verbose_name=_('CPU percent'), default=0.0)
-    mem_rss = models.FloatField(verbose_name=_('Memory (resident)'), default=0.0)
-    mem_vrt = models.FloatField(verbose_name=_('Memory (virtual)'), default=0.0)
     mem_percent = models.FloatField(verbose_name=_('Memnory percent'), default=0.0)

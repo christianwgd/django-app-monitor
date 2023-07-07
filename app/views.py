@@ -11,7 +11,7 @@ from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
 from chartjs.views.lines import BaseLineChartView
 
-from app.models import Application, ProcessMetric
+from app.models import Application, SystemMetric
 
 
 class AppList(LoginRequiredMixin, ListView):
@@ -30,8 +30,7 @@ class AppDetail(UserPassesTestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['value_names'] = [
-            ('cpu_time', 'ms'), ('cpu_percent', ''),
-            ('mem_vrt', 'Gb'), ('mem_rss', 'Gb'), ('mem_percent', '')
+            ('cpu_percent', '%'), ('mem_percent', '%')
         ]
         return context
 
@@ -63,7 +62,7 @@ class ValuesJSONView(BaseLineChartView):
         self.value_name = kwargs.get('name')
         app = Application.objects.get(id=kwargs.get('app_id'))
         from_time = now() - timedelta(hours=24)
-        self.queryset = ProcessMetric.objects.filter(
+        self.queryset = SystemMetric.objects.filter(
             app=app, timestamp__gte=from_time
         ).order_by('timestamp')
         return super().get(request, *args, **kwargs)
@@ -75,6 +74,4 @@ class ValuesJSONView(BaseLineChartView):
         return [formats.date_format(localtime(item.timestamp), 'H:i') for item in self.queryset]
 
     def get_data(self):
-        if self.value_name in ['mem_vrt', 'mem_rss']:
-            return [[round(getattr(item, self.value_name)*0.00000001, 2) for item in self.queryset]]
         return [[round(getattr(item, self.value_name), 2) for item in self.queryset]]

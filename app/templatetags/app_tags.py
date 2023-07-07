@@ -1,13 +1,13 @@
 from django import template
 
-from app.models import ProcessMetric
+from app.models import SystemMetric
 
 register = template.Library()
 
 
 @register.filter
 def label(arg):
-    return ProcessMetric._meta.get_field(arg).verbose_name
+    return SystemMetric._meta.get_field(arg).verbose_name
 
 
 @register.simple_tag
