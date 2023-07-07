@@ -5,10 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import formats
-from django.utils.timezone import now
+from django.utils.timezone import now, localtime
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 from chartjs.views.lines import BaseLineChartView
 
 from app.models import Application, ProcessMetric
@@ -72,7 +73,7 @@ class ValuesJSONView(BaseLineChartView):
         return [self.value_name]
 
     def get_labels(self):
-        return [formats.date_format(item.timestamp, 'H:i') for item in self.queryset]
+        return [formats.date_format(localtime(item.timestamp), 'H:i') for item in self.queryset]
 
     def get_data(self):
         if self.value_name in ['mem_vrt', 'mem_rss']:
