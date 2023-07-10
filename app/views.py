@@ -32,6 +32,7 @@ class AppDetail(UserPassesTestMixin, DetailView):
         context['value_names'] = [
             ('cpu_percent', '%'), ('mem_percent', '%')
         ]
+        context['hours'] = self.object.metric_days * 24
         return context
 
 

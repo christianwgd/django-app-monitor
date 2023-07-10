@@ -100,7 +100,7 @@
                     <span class="text-{{ color }}">{% bs_icon icon %}</span>
                     {% endif %}
                 </h5>
-                <small>{% trans 'Last 24 hours' %}</small>
+                <small>{% blocktrans %}Last {{ hours }} hours{% endblocktrans %}</small>
             </div>
             <div class="card-body">
                 <canvas id="{{ value.0 }}_chart" width="600" height="200"></canvas>
