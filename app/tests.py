@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.core import mail
 from django.core.management import call_command
 from django.test import TestCase
@@ -7,8 +9,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from faker import Faker
 
-from app.models import Application
-
+from app.models import Application, SystemMetric
 
 User = auth.get_user_model()
 
@@ -124,6 +125,29 @@ class ApplicationTest(TestCase):
         self.assertEqual(self.app.http_status, 404)
         self.assertEqual(len(mail.outbox), 0)
         self.assertTrue(self.app.alert_sent)
+
+    def test_app_call_command_truncate_metrics(self):
+        # Create some stale metrics, which will be deleted
+        for i in range(5):
+            SystemMetric.objects.create(
+                app=self.app,
+                cpu_percent=i*0.3,
+                mem_percent=i*0.2,
+            )
+            day_before = now() - timedelta(days=2)
+            SystemMetric.objects.update(
+                timestamp=day_before
+            )
+        # Create some current metrics, which will not be deleted
+        for i in range(3):
+            SystemMetric.objects.create(
+                app=self.app,
+                cpu_percent=i*0.1,
+                mem_percent=i*0.4,
+            )
+        self.assertEqual(self.app.metrics.count(), 8)
+        call_command('truncate_metrics')
+        self.assertEqual(self.app.metrics.count(), 3)
 
     def test_application_list(self):
         self.client.force_login(self.admin)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 12:31+0200\n"
+"POT-Creation-Date: 2023-07-10 14:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Please check service {name} at {url}."
 msgstr "Prüfen Sie den Service {name} unter {url}"
 
-#: models.py:19 models.py:141
+#: models.py:19 models.py:138
 msgid "Application"
 msgstr "Anwendung"
 
@@ -41,85 +41,89 @@ msgstr "Anwendung"
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: models.py:85
+#: models.py:82
 msgid "Name"
 msgstr ""
 
-#: models.py:86
+#: models.py:83
 msgid "URL"
 msgstr ""
 
-#: models.py:88
+#: models.py:85
 msgid "Administrators"
 msgstr "Administratoren"
 
-#: models.py:91
+#: models.py:88
 msgid "Logo"
 msgstr ""
 
-#: models.py:95
+#: models.py:92
 msgid "Notify by email"
 msgstr "Benachrichtigung per E-Mail"
 
-#: models.py:98
+#: models.py:95
 msgid "Use Django health check"
 msgstr "Django health check verwenden"
 
-#: models.py:101
+#: models.py:98
 msgid "Use psutil metrics"
 msgstr "psutil Metriken verwenden"
 
-#: models.py:104
+#: models.py:101
 msgid "Update in background"
 msgstr "Im Hintergrund aktualisieren"
 
-#: models.py:107
+#: models.py:104
 msgid "Last update"
 msgstr "Letzte Aktualisierung"
 
-#: models.py:112
+#: models.py:109
 msgid "HTTP Status"
 msgstr ""
 
-#: models.py:115
+#: models.py:112
 msgid "Health Check Status"
 msgstr ""
 
-#: models.py:119
+#: models.py:116
 msgid "Max. CPU Percentage"
 msgstr "Max. CPU Verbrauch in Prozent"
 
-#: models.py:122
+#: models.py:119
 msgid "Max. Memory Percentage"
 msgstr "Max. Speicherbelegung in Prozent"
 
-#: models.py:125
+#: models.py:122
 msgid "Alert sent"
 msgstr "Alarm gesendet"
 
-#: models.py:135
+#: models.py:132
 msgid "System metric"
 msgstr "System Metrik"
 
-#: models.py:136 templates/app/application_detail.html:84
+#: models.py:133 templates/app/application_detail.html:89
 msgid "System metrics"
 msgstr "System Metriken"
 
-#: models.py:139
+#: models.py:136
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: models.py:144
+#: models.py:141
 msgid "CPU percent"
 msgstr "CPU Prozent"
 
-#: models.py:145
+#: models.py:142
 msgid "Memnory percent"
 msgstr "Speicherbelegung in Prozent"
 
-#: templates/app/application_detail.html:62
+#: templates/app/application_detail.html:67
 msgid "Health Check"
 msgstr ""
+
+#: templates/app/application_detail.html:103
+msgid "Last 24 hours"
+msgstr "Letzte 24 Stunden"
 
 #: templates/app/application_list.html:24
 #: templates/app/application_list.html:27
