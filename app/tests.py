@@ -27,6 +27,7 @@ class ApplicationTest(TestCase):
         self.app = Application.objects.create(
             name=self.fake.word(),
             url='https://example.com',
+            metric_days=1,
         )
         self.app.admins.add(self.admin)
 
@@ -77,6 +78,9 @@ class ApplicationTest(TestCase):
         self.app.update_status()
         self.assertEqual(self.app.http_status, 200)
         self.assertEqual(self.app.last_update.date(), now().date())
+
+    def test_app_metric_days_in_hours(self):
+        self.assertEqual(self.app.metric_days_in_hours, self.app.metric_days * 24)
 
     def test_app_call_command_status_update(self):
         self.app.bg_update = True

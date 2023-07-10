@@ -71,6 +71,10 @@ class Application(models.Model):
             self.create_process_metric()
         self.save()
 
+    @property
+    def metric_days_in_hours(self):
+        return self.metric_days * 24
+
     def is_working(self):
         if self.http_status != 200:
             return False
