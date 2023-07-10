@@ -61,7 +61,7 @@ class ValuesJSONView(BaseLineChartView):
     def get(self, request, *args, **kwargs):
         self.value_name = kwargs.get('name')
         app = Application.objects.get(id=kwargs.get('app_id'))
-        from_time = now() - timedelta(hours=24)
+        from_time = now() - timedelta(hours=24 * app.metric_days)
         self.queryset = SystemMetric.objects.filter(
             app=app, timestamp__gte=from_time
         ).order_by('timestamp')

@@ -134,7 +134,7 @@ class ApplicationTest(TestCase):
                 cpu_percent=i*0.3,
                 mem_percent=i*0.2,
             )
-            day_before = now() - timedelta(days=2)
+            day_before = now() - timedelta(days=1)
             SystemMetric.objects.update(
                 timestamp=day_before
             )

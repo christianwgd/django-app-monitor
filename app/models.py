@@ -2,6 +2,7 @@ import requests
 from http.client import responses
 
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
@@ -120,6 +121,11 @@ class Application(models.Model):
     )
     alert_sent = models.BooleanField(
         verbose_name=_('Alert sent'), default=False
+    )
+    metric_days = models.PositiveIntegerField(
+        verbose_name=_('Show metrics for number of days'), default=1,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text=_('After this time old metrics will be deleted')
     )
 
 
