@@ -50,7 +50,7 @@ jobs:
     - name: Upload to codecov.io
       uses: codecov/codecov-action@v3
       env:
-        CODECOV_TOKEN: '6756b36a-7a96-44b5-87c9-a585a99fcb4d'
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
       with:
