@@ -4,4 +4,6 @@
 <p align="center"><img src="app_monitor/static/favicon/android-chrome-384x384.png" width=200em alt="Django App Monitor" /></p>
 
 # Django App Monitor
-Monitoring all your web apps 
+Monitoring all your web apps
+
+*Documentation in progress*
