@@ -10,6 +10,8 @@ from django.contrib import auth
 
 User = auth.get_user_model()
 
+REQUEST_TIMEOUT = getattr(settings, 'REQUEST_TIMEOUT', 20)
+
 
 class Application(models.Model):
     """
@@ -26,7 +28,7 @@ class Application(models.Model):
 
     def get_http_status(self):
         try:
-            r = requests.get(f'{self.url}/', timeout=10)
+            r = requests.get(f'{self.url}/', timeout=20)
         except requests.exceptions.ConnectionError:
             return 408
         return r.status_code
