@@ -29,7 +29,7 @@ class Application(models.Model):
     def get_http_status(self):
         try:
             r = requests.get(f'{self.url}/', timeout=20)
-        except requests.exceptions.ConnectionError:
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             return 408
         return r.status_code
 
