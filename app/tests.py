@@ -49,7 +49,7 @@ class ApplicationTest(TestCase):
         status_record = StatusRecord.objects.latest('timestamp')
         self.assertEqual(status_record.app, self.app)
         self.assertEqual(status_record.typus, 'http status')
-        self.assertEqual(status_record.value, '404')
+        self.assertEqual(status_record.value, '404 Not Found')
 
     def test_app_get_health_check_data(self):
         self.assertEqual(
