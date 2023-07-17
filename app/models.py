@@ -29,9 +29,16 @@ class Application(models.Model):
     def get_http_status(self):
         try:
             r = requests.get(f'{self.url}/', timeout=20)
+            rc = r.status_code
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-            return 408
-        return r.status_code
+            rc = 408
+        if rc != 200:
+            StatusRecord.objects.create(
+                app=self,
+                typus='http status',
+                value=f'{rc} {responses[rc]}'
+            )
+        return rc
 
     @property
     def get_http_status_text(self):
@@ -45,7 +52,7 @@ class Application(models.Model):
             r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
             if r.status_code == 200:
                 return r.json()
-        except requests.exceptions.ConnectionError:
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             pass
         return {}
 
@@ -133,6 +140,26 @@ class Application(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         help_text=_('After this time old metrics will be deleted')
     )
+
+
+class StatusRecord(models.Model):
+    """
+    Log status info
+    """
+
+    class Meta:
+        verbose_name = _('Status record')
+        verbose_name_plural = _('Status records')
+        ordering = ['timestamp']
+
+    timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
+    app = models.ForeignKey(
+        Application, verbose_name=_('Application'),
+        related_name='status_records', on_delete=models.CASCADE,
+    )
+    typus = models.CharField(verbose_name=_('Type'), max_length=50)
+    value = models.CharField(verbose_name=_('Value'), max_length=50)
+
 
 
 class SystemMetric(models.Model):

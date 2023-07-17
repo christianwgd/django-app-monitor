@@ -1,12 +1,18 @@
 from django.contrib import admin
 
-from app.models import Application, SystemMetric
+from app.models import Application, SystemMetric, StatusRecord
 
 
 @admin.register(Application)
 class ApplicationPostAdmin(admin.ModelAdmin):
     list_display = ['name']
     autocomplete_fields = ['admins']
+
+
+@admin.register(StatusRecord)
+class StatusRecordAdmin(admin.ModelAdmin):
+    list_display = ['timestamp', 'app', 'typus', 'value']
+    list_filter = ['app', 'typus']
 
 
 @admin.register(SystemMetric)
