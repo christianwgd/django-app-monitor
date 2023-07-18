@@ -45,11 +45,11 @@
 
 {% block content %}
 <h6 class="float-end">Letzte Aktualisierung: {{ application.last_update }}</h6>
-<div class="row">
-    <div class="col-sm-12">
+<div class="row row-cols-1 g-3">
+    <div class="card-group">
         <div class="card text-center border-{% http_status_color application.http_status %}">
             <div class="card-header">
-                <h5 class="mt-2">HTTP Status</h5>
+                <h5 class="mt-2">{% trans 'HTTP Status' %}</h5>
             </div>
             <div class="card-body">
                 <p class="mb-1">
@@ -112,6 +112,34 @@
         </div>
     </div>
     {% endfor %}
+</div>
+{% endif %}
+
+{% if application.alerts.count > 0 %}
+<h4 class="text-center mt-5">{% trans 'Alerts' %}</h4>
+<div class="row row-cols-1 g-3">
+    <div class="card-group">
+        <div class="card border-default p-3">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Timestamp' %}</th>
+                        <th>{% trans 'Type' %}</th>
+                        <th>{% trans 'Value' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for alert in application.alerts.all %}
+                    <tr>
+                        <td>{{ alert.timestamp }}</td>
+                        <td>{{ alert.typus }}</td>
+                        <td>{{ alert.value }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

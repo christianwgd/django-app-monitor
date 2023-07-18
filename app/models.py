@@ -33,9 +33,9 @@ class Application(models.Model):
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             rc = 408
         if rc != 200:
-            StatusRecord.objects.create(
+            Alert.objects.create(
                 app=self,
-                typus='http status',
+                typus=_('HTTP Status'),
                 value=f'{rc} {responses[rc]}'
             )
         return rc
@@ -142,24 +142,23 @@ class Application(models.Model):
     )
 
 
-class StatusRecord(models.Model):
+class Alert(models.Model):
     """
     Log status info
     """
 
     class Meta:
-        verbose_name = _('Status record')
-        verbose_name_plural = _('Status records')
+        verbose_name = _('Alert')
+        verbose_name_plural = _('Alerts')
         ordering = ['timestamp']
 
     timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
     app = models.ForeignKey(
         Application, verbose_name=_('Application'),
-        related_name='status_records', on_delete=models.CASCADE,
+        related_name='alerts', on_delete=models.CASCADE,
     )
     typus = models.CharField(verbose_name=_('Type'), max_length=50)
     value = models.CharField(verbose_name=_('Value'), max_length=50)
-
 
 
 class SystemMetric(models.Model):

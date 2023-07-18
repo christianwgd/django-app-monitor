@@ -9,7 +9,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from faker import Faker
 
-from app.models import Application, SystemMetric, StatusRecord
+from app.models import Application, SystemMetric, Alert
 
 User = auth.get_user_model()
 
@@ -35,20 +35,20 @@ class ApplicationTest(TestCase):
         self.assertEqual(str(self.app), self.app.name)
 
     def test_app_get_http_status_200(self):
-        record_count = StatusRecord.objects.count()
+        record_count = Alert.objects.count()
         self.assertEqual(self.app.get_http_status(), 200)
-        self.assertEqual(StatusRecord.objects.count(), record_count)
+        self.assertEqual(Alert.objects.count(), record_count)
 
     def test_app_get_http_status_404(self):
         self.app.url = 'https://example.com/not_found/'
         self.app.save()
         self.app.refresh_from_db()
-        record_count = StatusRecord.objects.count()
+        record_count = Alert.objects.count()
         self.assertEqual(self.app.get_http_status(), 404)
-        self.assertEqual(StatusRecord.objects.count(), record_count + 1)
-        status_record = StatusRecord.objects.latest('timestamp')
+        self.assertEqual(Alert.objects.count(), record_count + 1)
+        status_record = Alert.objects.latest('timestamp')
         self.assertEqual(status_record.app, self.app)
-        self.assertEqual(status_record.typus, 'http status')
+        self.assertEqual(status_record.typus, _('HTTP Status'))
         self.assertEqual(status_record.value, '404 Not Found')
 
     def test_app_get_health_check_data(self):
