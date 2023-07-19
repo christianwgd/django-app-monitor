@@ -44,7 +44,7 @@
 {% block page_title %}Status {{ application.name }}{% endblock %}
 
 {% block content %}
-<h6 class="float-end">Letzte Aktualisierung: {{ application.last_update }}</h6>
+<h6 class="text-center mb-3">Letzte Aktualisierung: {{ application.last_update }}</h6>
 <div class="row row-cols-1 g-3">
     <div class="card-group">
         <div class="card text-center border-{% http_status_color application.http_status %}">
