@@ -69,7 +69,7 @@ class Application(models.Model):
                         cpu_percent=json_metrics['cpu_percent'],
                         mem_percent=json_metrics['mem_percent'],
                     )
-            except requests.exceptions.ConnectionError:
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
                 pass
 
     def update_status(self):
