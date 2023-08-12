@@ -224,3 +224,9 @@ class ApplicationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed('app/application_detail.html')
         self.assertEqual(response.context['application'], self.app)
+
+    def test_application_immedeate_update_view(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse('app:update', kwargs={'app_id': self.app.id}))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('app:list'))
