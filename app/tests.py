@@ -1,5 +1,7 @@
 from datetime import timedelta
+from urllib.parse import urljoin
 
+from django.conf import settings
 from django.core import mail
 from django.core.management import call_command
 from django.test import TestCase
@@ -34,6 +36,19 @@ class ApplicationTest(TestCase):
 
     def test_app_str(self):
         self.assertEqual(str(self.app), self.app.name)
+
+    def test_app_get_absolute_url(self):
+        self.assertEqual(
+            self.app.get_absolute_url(),
+            reverse('app:detail', kwargs={'pk': self.app.id})
+        )
+
+    def test_app_get_absolute_uri(self):
+        domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnete.de')
+        self.assertEqual(
+            self.app.get_absolute_uri(),
+            urljoin(domain, self.app.get_absolute_url())
+        )
 
     def test_is_due_5(self):
         for m in range(0, 60, 5):
@@ -138,7 +153,7 @@ class ApplicationTest(TestCase):
             'Please check service {name} at {url}.'
         ).format(
             name=self.app.name,
-            url=reverse('app:detail', kwargs={'pk': self.app.id})
+            url=self.app.get_absolute_uri()
         )
         self.assertEqual(mail.outbox[0].body, message)
         self.assertTrue(self.app.alert_sent)

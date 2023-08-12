@@ -1,9 +1,12 @@
+from urllib.parse import urljoin
+
 import requests
 from http.client import responses
 
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
 
@@ -32,6 +35,13 @@ class Application(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('app:detail', kwargs={'pk': self.id})
+
+    def get_absolute_uri(self):
+        domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnete.de')
+        return urljoin(domain, self.get_absolute_url())
 
     def is_due(self, cron_minute):
         m5 = 5 * round(cron_minute / 5)
@@ -152,7 +162,7 @@ class Application(models.Model):
         help_text=_('After this time old metrics will be deleted')
     )
     frequency =  models.IntegerField(
-        verbose_name=_('State'),
+        verbose_name=_('Test frequency'),
         choices=FREQUENCY_CHOICES, default=15,
     )
 
