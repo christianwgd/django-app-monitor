@@ -4,7 +4,6 @@ from http.client import responses
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
 
