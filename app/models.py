@@ -4,6 +4,7 @@ from http.client import responses
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
 
@@ -11,6 +12,13 @@ from django.contrib import auth
 User = auth.get_user_model()
 
 REQUEST_TIMEOUT = getattr(settings, 'REQUEST_TIMEOUT', 20)
+
+FREQUENCY_CHOICES = (
+    (5, '5'),
+    (10, '10'),
+    (15, '15'),
+    (30, '30'),
+)
 
 
 class Application(models.Model):
@@ -25,6 +33,10 @@ class Application(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_due(self, cron_minute):
+        m5 = 5 * round(cron_minute / 5)
+        return m5 % self.frequency == 0
 
     def get_http_status(self):
         try:
@@ -139,6 +151,11 @@ class Application(models.Model):
         verbose_name=_('Show metrics for number of days'), default=1,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         help_text=_('After this time old metrics will be deleted')
+    )
+    frequency =  models.IntegerField(
+        verbose_name=_('State'),
+        choices=FREQUENCY_CHOICES, default=15,
+        help_text=_("With Draft chosen, will only be shown for admin users on the site.")
     )
 
 

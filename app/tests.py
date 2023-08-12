@@ -28,11 +28,34 @@ class ApplicationTest(TestCase):
             name=self.fake.word(),
             url='https://example.com',
             metric_days=1,
+            frequency=5,
         )
         self.app.admins.add(self.admin)
 
     def test_app_str(self):
         self.assertEqual(str(self.app), self.app.name)
+
+    def test_is_due_5(self):
+        for m in range(0, 60, 5):
+            self.assertTrue(self.app.is_due(m))
+
+    def test_is_due_10(self):
+        self.app.frequency = 10
+        self.app.save()
+        self.app.refresh_from_db()
+        for m in range(0, 60, 10):
+            self.assertTrue(self.app.is_due(m))
+        for m in [5, 15, 25, 55]:
+            self.assertFalse(self.app.is_due(m))
+
+    def test_is_due_15(self):
+        self.app.frequency = 15
+        self.app.save()
+        self.app.refresh_from_db()
+        for m in range(0, 60, 15):
+            self.assertTrue(self.app.is_due(m))
+        for m in [5, 10, 20, 25, 55]:
+            self.assertFalse(self.app.is_due(m))
 
     def test_app_get_http_status_200(self):
         record_count = Alert.objects.count()
