@@ -165,7 +165,7 @@ class Alert(models.Model):
     class Meta:
         verbose_name = _('Alert')
         verbose_name_plural = _('Alerts')
-        ordering = ['timestamp']
+        ordering = ['-timestamp']
 
     timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
     app = models.ForeignKey(
