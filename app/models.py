@@ -154,7 +154,6 @@ class Application(models.Model):
     frequency =  models.IntegerField(
         verbose_name=_('State'),
         choices=FREQUENCY_CHOICES, default=15,
-        help_text=_("With Draft chosen, will only be shown for admin users on the site.")
     )
 
 
