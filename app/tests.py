@@ -136,7 +136,10 @@ class ApplicationTest(TestCase):
         )
         message = _(
             'Please check service {name} at {url}.'
-        ).format(name=self.app.name, url=self.app.url)
+        ).format(
+            name=self.app.name,
+            url=reverse('app:detail', kwargs={'pk': self.app.id})
+        )
         self.assertEqual(mail.outbox[0].body, message)
         self.assertTrue(self.app.alert_sent)
 
