@@ -40,7 +40,7 @@ class Application(models.Model):
         return reverse('app:detail', kwargs={'pk': self.id})
 
     def get_absolute_uri(self):
-        domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnete.de')
+        domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnet.de')
         return urljoin(domain, self.get_absolute_url())
 
     def is_due(self, cron_minute):
