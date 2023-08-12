@@ -44,7 +44,7 @@ class ApplicationTest(TestCase):
         )
 
     def test_app_get_absolute_uri(self):
-        domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnete.de')
+        domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnet.de')
         self.assertEqual(
             self.app.get_absolute_uri(),
             urljoin(domain, self.app.get_absolute_url())
