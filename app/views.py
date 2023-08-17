@@ -80,3 +80,6 @@ class ValuesJSONView(BaseLineChartView):
 
     def get_data(self):
         return [[round(getattr(item, self.value_name), 2) for item in self.queryset]]
+
+    def get_colors(self):
+        return iter([(120, 120, 120)])
