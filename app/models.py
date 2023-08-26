@@ -49,7 +49,7 @@ class Application(models.Model):
 
     def get_http_status(self):
         try:
-            r = requests.get(f'{self.url}/', timeout=20)
+            r = requests.get(f'{self.url}/', timeout=self.timeout)
             rc = r.status_code
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             rc = 408
@@ -70,7 +70,7 @@ class Application(models.Model):
     def get_health_check_data(self):
         headers = {'Accept': 'application/json'}
         try:
-            r = requests.get(f'{self.url}/ht/', headers=headers, timeout=20)
+            r = requests.get(f'{self.url}/ht/', headers=headers, timeout=self.timeout)
             if r.status_code == 200:
                 return r.json()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
@@ -82,7 +82,7 @@ class Application(models.Model):
         if token:
             try:
                 headers = {'Accept': 'application/json', 'token': token}
-                r = requests.get(f'{self.url}/metrics/', headers=headers, timeout=20)
+                r = requests.get(f'{self.url}/metrics/', headers=headers, timeout=self.timeout)
                 if r.status_code == 200:
                     json_metrics = r.json()
                     SystemMetric.objects.create(
@@ -165,6 +165,7 @@ class Application(models.Model):
         verbose_name=_('Test frequency'),
         choices=FREQUENCY_CHOICES, default=15,
     )
+    timeout = models.PositiveSmallIntegerField(default=20, verbose_name=_('Timeout'))
 
 
 class Alert(models.Model):
