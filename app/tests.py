@@ -4,6 +4,7 @@ from urllib.parse import urljoin
 from django.conf import settings
 from django.core import mail
 from django.core.management import call_command
+from django.template import Template, Context
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib import auth
@@ -16,7 +17,7 @@ from app.models import Application, SystemMetric, Alert
 User = auth.get_user_model()
 
 
-class ApplicationTest(TestCase):
+class ApplicationTestCase(TestCase):
 
     def setUp(self):
         self.fake = Faker()
@@ -230,3 +231,64 @@ class ApplicationTest(TestCase):
         response = self.client.get(reverse('app:update', kwargs={'app_id': self.app.id}))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('app:list'))
+
+    # Template tag tests
+    def test_label_filter(self):
+        template = Template(
+            """{% load app_tags %}
+            {{ value_names.0.0|label }}
+            {{ value_names.1.0|label }}"""
+        )
+        context = Context({'value_names': [
+            ('cpu_percent', '%'), ('mem_percent', '%')
+        ]})
+
+        result = template.render(context)
+        self.assertIn('CPU Prozent', result)
+        self.assertIn('Speicherbelegung in Prozent', result)
+
+    def test_http_status_color_success(self):
+        template = Template(
+            """{% load app_tags %}
+            {% http_status_color value %}"""
+        )
+        context = Context({'value': 200})
+        result = template.render(context)
+        self.assertIn('success', result)
+
+    def test_http_status_color_danger(self):
+        template = Template(
+            """{% load app_tags %}
+            {% http_status_color value %}"""
+        )
+        context = Context({'value': 500})
+        result = template.render(context)
+        self.assertIn('danger', result)
+
+    def test_health_check_color_success(self):
+        template = Template(
+            """{% load app_tags %}
+            {% health_check_color value %}"""
+        )
+        context = Context({'value': 'working'})
+        result = template.render(context)
+        self.assertIn('success', result)
+
+    def test_health_check_color_danger(self):
+        template = Template(
+            """{% load app_tags %}
+            {% health_check_color value %}"""
+        )
+        context = Context({'value': 'danger'})
+        result = template.render(context)
+        self.assertIn('danger', result)
+
+    # def test_metrics_color_success(self):
+    #     # Create values for app
+    #     template = Template(
+    #         """{% load app_tags %}
+    #         {% metrics_color value %}"""
+    #     )
+    #     context = Context({'value': 'working'})
+    #     result = template.render(context)
+    #     self.assertIn('success', result)
