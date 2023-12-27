@@ -1,7 +1,7 @@
-django==4.2.7
-django-axes==6.1.1
+django==5.0
+django-axes==6.3.0
 django-bootstrap5==23.3
-django-bootstrap-icons==0.8.6
+django-bootstrap-icons==0.8.7
 django-chartjs==2.3.0
 Pillow==10.1.0
 psycopg2-binary==2.9.9
