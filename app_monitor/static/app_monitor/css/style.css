@@ -5,3 +5,7 @@
 .page-title {
     text-align: center;
 }
+
+.mode-icon {
+    display: none;
+}

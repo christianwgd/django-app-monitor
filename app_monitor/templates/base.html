@@ -16,27 +16,7 @@
 
 {% block bootstrap5_extra_script %}
 {{ block.super }}
-<script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    const htmlElement = document.documentElement;
-    const switchElement = document.getElementById('darkModeSwitch');
-
-    // Set the default theme to dark if no setting is found in local storage
-    const currentTheme = localStorage.getItem('bsTheme') || 'dark';
-    htmlElement.setAttribute('data-bs-theme', currentTheme);
-    switchElement.checked = currentTheme === 'dark';
-
-    switchElement.addEventListener('change', function () {
-        if (this.checked) {
-            htmlElement.setAttribute('data-bs-theme', 'dark');
-            localStorage.setItem('bsTheme', 'dark');
-        } else {
-            htmlElement.setAttribute('data-bs-theme', 'light');
-            localStorage.setItem('bsTheme', 'light');
-        }
-    });
-});
-</script>
+<script type="text/javascript" src="{% static 'js/dark_mode.js' %}"></script>
 {% endblock %}
 
 {% block bootstrap5_title %}{% trans 'Django App Monitor' %}{% endblock %}
@@ -78,6 +58,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         {% endif %}
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="modeDropdown" data-bs-toggle="dropdown" href="">
+                        <span id="icon-dark" class="mode-icon">{% bs_icon 'moon-stars-fill' %}</span>
+                        <span id="icon-light" class="mode-icon">{% bs_icon 'sun-fill' %}</span>
+                        <span id="icon-auto" class="mode-icon">{% bs_icon 'circle-half' %}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
+                        <a id="id_light_mode" class="dropdown-item" href="">
+                            {% bs_icon 'sun-fill' %}
+                            {% trans 'Light' %}
+                        </a>
+                        <a id="id_dark_mode" class="dropdown-item" href="">
+                            {% bs_icon 'moon-stars-fill' %}
+                            {% trans 'Dark' %}
+                        </a>
+                        <a id="id_system_mode" class="dropdown-item" href="">
+                            {% bs_icon 'circle-half' %}
+                            {% trans 'System' %}
+                        </a>
+                    </ul>
+                </li>
             </ul>
             {% endif %}
         </div>
@@ -88,10 +89,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     <div class="row">
         <div class="col-12">
             {% bootstrap_messages %}
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
-                <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
-            </div>
             <h2 class="page-title mb-3">{% block page_title %}{% endblock %}</h2>
             {% block content %}{% endblock %}
         </div>
