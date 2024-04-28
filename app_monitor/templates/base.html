@@ -16,12 +16,33 @@
 
 {% block bootstrap5_extra_script %}
 {{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const htmlElement = document.documentElement;
+    const switchElement = document.getElementById('darkModeSwitch');
+
+    // Set the default theme to dark if no setting is found in local storage
+    const currentTheme = localStorage.getItem('bsTheme') || 'dark';
+    htmlElement.setAttribute('data-bs-theme', currentTheme);
+    switchElement.checked = currentTheme === 'dark';
+
+    switchElement.addEventListener('change', function () {
+        if (this.checked) {
+            htmlElement.setAttribute('data-bs-theme', 'dark');
+            localStorage.setItem('bsTheme', 'dark');
+        } else {
+            htmlElement.setAttribute('data-bs-theme', 'light');
+            localStorage.setItem('bsTheme', 'light');
+        }
+    });
+});
+</script>
 {% endblock %}
 
 {% block bootstrap5_title %}{% trans 'Django App Monitor' %}{% endblock %}
 
 {% block bootstrap5_content %}
-<nav class="navbar fixed-top navbar-expand bg-light">
+<nav class="navbar fixed-top navbar-expand">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'app/img/app.png' %}" alt="{% trans 'Django App Monitor' %}" height="25">
@@ -67,6 +88,10 @@
     <div class="row">
         <div class="col-12">
             {% bootstrap_messages %}
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch" checked>
+                <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+            </div>
             <h2 class="page-title mb-3">{% block page_title %}{% endblock %}</h2>
             {% block content %}{% endblock %}
         </div>

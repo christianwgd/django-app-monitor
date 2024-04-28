@@ -17,7 +17,7 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
 {% for app in application_list %}
     <div class="card-group">
-        <div class="card bg-light text-center">
+        <div class="card text-center">
             <div class="card-header text-center">
                 <h5 class="mb-0">
                     {{ app.name }}
@@ -36,7 +36,7 @@
                 <img class="card-img-top" src="{% static 'app/img/app.png' %}" alt="{{ app.name }}">
                 {% endif %}
             </div>
-            <div class="card-body text-center bg-white">
+            <div class="card-body text-center">
                 <div class="status {% if app.http_status == 200 %}text-bg-success{% else %}text-bg-danger{% endif %}">
                     Status: {{ app.http_status }} {{ app.get_http_status_text }}
                 </div>
