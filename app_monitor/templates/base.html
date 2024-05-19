@@ -12,11 +12,12 @@
 <link rel="stylesheet" href="{% static "app_monitor/css/style.css" %}">
 <link rel="stylesheet" href="{% static "app_monitor/css/messages.css" %}">
 <link rel="stylesheet" href="{% static 'bootstrap_icons/css/bootstrap_icons.css' %}" />
+<link href="{% static 'dark_mode_switch/dark-mode-switch.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block bootstrap5_extra_script %}
 {{ block.super }}
-<script type="text/javascript" src="{% static 'js/dark_mode.js' %}"></script>
+<script src="{% static 'dark_mode_switch/dark-mode-switch.js' %}"></script>
 {% endblock %}
 
 {% block bootstrap5_title %}{% trans 'Django App Monitor' %}{% endblock %}
@@ -58,27 +59,7 @@
                         {% endif %}
                     </div>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="modeDropdown" data-bs-toggle="dropdown" href="">
-                        <span id="icon-dark" class="mode-icon">{% bs_icon 'moon-stars-fill' %}</span>
-                        <span id="icon-light" class="mode-icon">{% bs_icon 'sun-fill' %}</span>
-                        <span id="icon-auto" class="mode-icon">{% bs_icon 'circle-half' %}</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-                        <a id="id_light_mode" class="dropdown-item" href="">
-                            {% bs_icon 'sun-fill' %}
-                            {% trans 'Light' %}
-                        </a>
-                        <a id="id_dark_mode" class="dropdown-item" href="">
-                            {% bs_icon 'moon-stars-fill' %}
-                            {% trans 'Dark' %}
-                        </a>
-                        <a id="id_system_mode" class="dropdown-item" href="">
-                            {% bs_icon 'circle-half' %}
-                            {% trans 'System' %}
-                        </a>
-                    </ul>
-                </li>
+                {% include 'dark_mode_switch/dark_mode_switch.html' %}
             </ul>
             {% endif %}
         </div>

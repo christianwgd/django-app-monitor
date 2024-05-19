@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'app',
     'app_monitor',
     'chartjs',
+    'dark_mode_switch',
     'django_bootstrap_icons',
     'django_bootstrap5',
 ]
