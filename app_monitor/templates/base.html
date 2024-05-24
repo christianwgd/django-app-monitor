@@ -23,10 +23,10 @@
 {% block bootstrap5_title %}{% trans 'Django App Monitor' %}{% endblock %}
 
 {% block bootstrap5_content %}
-<nav class="navbar fixed-top navbar-expand">
+<nav class="navbar fixed-top navbar-expand-sm bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'app/img/app.png' %}" alt="{% trans 'Django App Monitor' %}" height="25">
+            <img src="{% static 'app/img/app.png' %}" alt="" height="25">
             {% trans 'Django App Monitor' %}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             {% if user.is_authenticated %}
             <ul class="navbar-nav ms-auto">
+                {% include 'dark_mode_switch/dark_mode_switch.html' %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" href="">
                         {% bs_icon 'person-fill' %}
@@ -59,7 +60,6 @@
                         {% endif %}
                     </div>
                 </li>
-                {% include 'dark_mode_switch/dark_mode_switch.html' %}
             </ul>
             {% endif %}
         </div>
