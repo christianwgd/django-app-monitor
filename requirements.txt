@@ -1,9 +1,9 @@
-Django==5.0.6
-django-axes==6.4.0
+Django==5.0.7
+django-axes==6.5.1
 django-bootstrap5==24.2
 django-bootstrap5-dark-mode-switch==0.2.2
 django-bootstrap-icons==0.8.7
 django-chartjs==2.3.0
-pillow==10.3.0
+pillow==10.4.0
 psycopg2-binary==2.9.9
 requests==2.32.3
