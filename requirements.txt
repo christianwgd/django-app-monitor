@@ -1,4 +1,4 @@
-Django==5.0.7
+Django==5.0.8
 django-axes==6.5.1
 django-bootstrap5==24.2
 django-bootstrap5-dark-mode-switch==0.2.2
