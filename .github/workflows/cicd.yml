@@ -56,14 +56,13 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: |
-          "./unittest.xml"
-          "./coverage.xml"
-          "./coverage.svg"
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v4
-      with:
-        name: code-coverage-badge
-        path: coverage.svg
+          test-results/**/*.xml
+          test-results/**/*.svg
+#    - name: Archive code coverage results
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: code-coverage-badge
+#        path: coverage.svg
 #    - name: Upload to codecov.io
 #      uses: codecov/codecov-action@v3
 #      env:
