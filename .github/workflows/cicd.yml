@@ -1,4 +1,4 @@
-name: Django CI run test
+name: Django Tests
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         python-version: ['3.10', '3.11', '3.12']
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
@@ -46,13 +46,21 @@ jobs:
         pip install -r test-requirements.txt
     - name: Create coverage report
       run: |
-        pytest --cov --cov-report=xml
-    - name: Upload to codecov.io
-      uses: codecov/codecov-action@v3
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v3
+        pytest --junitxml=unittest.xml --cov --cov-report=xml
+        genbadge coverage -i coverage.xml -o coverage.svg -n "Test Coverage"
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        name: code-coverage-report
-        path: coverage.xml
+        files: |
+          "./unittest.xml"
+          "./coverage.xml"
+          "./coverage.svg"
+#    - name: Upload to codecov.io
+#      uses: codecov/codecov-action@v3
+#      env:
+#        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+#    - name: Archive code coverage results
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: code-coverage-report
+#        path: coverage.xml
