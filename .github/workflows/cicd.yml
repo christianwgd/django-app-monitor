@@ -56,8 +56,9 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: |
-          test-results/**/*.xml
-          test-results/**/*.svg
+          unittest.xml
+          coverage.xml
+          coverage.svg
 #    - name: Archive code coverage results
 #      uses: actions/upload-artifact@v4
 #      with:
