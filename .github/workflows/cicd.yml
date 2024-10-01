@@ -51,13 +51,15 @@ jobs:
         pip install -r test-requirements.txt
     - name: Create coverage report
       run: |
-        pytest --junitxml=unittest.xml --cov --cov-report=xml
-        genbadge coverage -i coverage.xml -o coverage.svg -n "Test Coverage"
-#    - name: Publish Test Results
-#      uses: EnricoMi/publish-unit-test-result-action@v2
-#      with:
-#        files: |
-#          "coverage.svg"
+        pytest --junitxml=test-results/unittest.xml --cov --cov-report=xml:test-results/coverage.xml
+        genbadge coverage -i test-results/coverage.xml -o test-results/coverage.svg -n "Test Coverage"
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: |
+          "test-results/unittest.xml"
+          "test-results/coverage.xml"
+          "test-results/coverage.svg"
     - name: Commit Changed Files
       run: |
         git config --local user.email "action@github.com"
