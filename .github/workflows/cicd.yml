@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-permissions:
-  checks: write
-  pull-requests: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,8 +33,13 @@ jobs:
   Coverage:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
@@ -59,11 +60,15 @@ jobs:
           "./unittest.xml"
           "./coverage.xml"
           "./coverage.svg"
-    - name: Upload svg
-      uses: actions/upload-artifact@v4
+    - uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        name: coverage-svg
-        path: "./coverage.svg"
+        commit_message: 'Update coverage svg'
+        file_pattern: 'coverage.svg'
+#    - name: Upload svg
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: coverage-svg
+#        path: "./coverage.svg"
 #    - name: Upload to codecov.io
 #      uses: codecov/codecov-action@v3
 #      env:
