@@ -57,10 +57,9 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: |
-          "./unittest.xml"
-          "./coverage.xml"
-          "./coverage.svg"
-    - uses: stefanzweifel/git-auto-commit-action@v5
+          "/coverage.svg"
+    - name: Check in of coverage svg
+      uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: 'Update coverage svg'
         file_pattern: 'coverage.svg'
