@@ -53,11 +53,11 @@ jobs:
       run: |
         pytest --junitxml=unittest.xml --cov --cov-report=xml
         genbadge coverage -i coverage.xml -o coverage.svg -n "Test Coverage"
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      with:
-        files: |
-          "coverage.svg"
+#    - name: Publish Test Results
+#      uses: EnricoMi/publish-unit-test-result-action@v2
+#      with:
+#        files: |
+#          "coverage.svg"
     - name: Commit Changed Files
       run: |
         git config --local user.email "action@github.com"
