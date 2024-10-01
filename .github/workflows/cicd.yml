@@ -57,12 +57,18 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: |
-          "/coverage.svg"
-    - name: Check in of coverage svg
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: 'Update coverage svg'
-        file_pattern: 'coverage.svg'
+          "coverage.svg"
+    - name: Commit Changed Files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add --all
+        git commit -m "Add changes" -a
+#    - name: Check in of coverage svg
+#      uses: stefanzweifel/git-auto-commit-action@v5
+#      with:
+#        commit_message: 'Update coverage svg'
+#        file_pattern: 'coverage.svg'
 #    - name: Upload svg
 #      uses: actions/upload-artifact@v4
 #      with:
