@@ -52,10 +52,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: coverage.svg
-        path: ./coverage.svg
+        path: /
       if: ${{ always() }}
     - name: Download coverage svg
       uses: actions/download-artifact@v4
       with:
         name: coverage.svg
-        # path: test-results
+        path: test-results/
