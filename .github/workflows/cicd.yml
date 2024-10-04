@@ -61,7 +61,7 @@ jobs:
       with:
         workflow: upload-artefact
         name: test-coverage-results
-        path: test-results
+#        path: test-results
         workflow_search: false
         workflow_conclusion: success
         check_artifacts: false
