@@ -46,13 +46,13 @@ jobs:
         pip install -r test-requirements.txt
     - name: Create coverage report
       run: |
-        pytest --junitxml=unittest.xml --cov --cov-report=xml:coverage.xml
-        genbadge coverage -i coverage.xml -o coverage.svg -n "Test Coverage"
+        pytest --junitxml=test-results/unittest.xml --cov --cov-report=xml:test-results/coverage.xml
+        genbadge coverage -i test-results/coverage.xml -o test-results/coverage.svg -n "Test Coverage"
     - name: Upload coverage results
       uses: actions/upload-artifact@v4
       with:
         name: test-coverage-results
-        path: .
+        path: test-results/*
       if: ${{ always() }}
 #    - name: Download coverage svg
 #      uses: actions/download-artifact@v4
