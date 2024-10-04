@@ -58,6 +58,7 @@ jobs:
       id: download-artifact
       uses: dawidd6/action-download-artifact@v6
       with:
+        name: test-coverage-results
         # If no workflow is set and workflow_search set to true, then the most recent workflow matching
         # all other criteria will be looked up instead of using the current workflow
         workflow_search: false
