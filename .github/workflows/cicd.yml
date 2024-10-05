@@ -55,20 +55,8 @@ jobs:
         name: test-coverage-results
         path: test-results/*
       if: ${{ always() }}
-#    - name: Download artifact
-#      id: download-artifact
-#      uses: dawidd6/action-download-artifact@v6
-#      with:
-#        workflow: upload-artefact
-#        name: test-coverage-results
-##        path: test-results
-#        workflow_search: false
-#        workflow_conclusion: success
-#        check_artifacts: false
-#        search_artifacts: false
-#        skip_unpack: false
     - name: Push changes
       run: |
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
