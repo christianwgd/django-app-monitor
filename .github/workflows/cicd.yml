@@ -51,13 +51,18 @@ jobs:
       run: |
         pytest --junitxml=test-results/unittest.xml --cov --cov-report=xml:test-results/coverage.xml
         genbadge coverage -i test-results/coverage.xml -o test-results/coverage.svg -n "Test Coverage"
-    - name: Upload coverage results
-      id: upload-artefact
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-coverage-results
-        path: test-results/*
-      if: ${{ always() }}
+    - name: Check for changes to spells.rst
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add test-results/*
+#    - name: Upload coverage results
+#      id: upload-artefact
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: test-coverage-results
+#        path: test-results/*
+#      if: ${{ always() }}
     - name: Push changes
       run: |
         git push
