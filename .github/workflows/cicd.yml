@@ -57,3 +57,7 @@ jobs:
         name: coverage.svg
         path: ./coverage.svg
       if: ${{ always() }}
+    - uses: actions/download-artifact@v4
+      with:
+        name: coverage.svg
+        path: ./coverage.svg
