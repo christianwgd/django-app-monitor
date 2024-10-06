@@ -49,15 +49,26 @@ jobs:
         pip install -r test-requirements.txt
     - name: Create coverage report
       run: |
-        pytest --junitxml=unittest.xml --cov --cov-report=xml:coverage.xml
+        pytest --junitxml=unittest.xml --cov --cov-report=xml
         genbadge coverage -i coverage.xml -o coverage.svg -n "Test Coverage"
     - name: Upload coverage results
       uses: actions/upload-artifact@v4
       with:
-        name: coverage.svg
-        path: ./coverage.svg
+        name: coverage.zip
+        path: ./coverage.zip
       if: ${{ always() }}
     - uses: actions/download-artifact@v4
       with:
-        name: coverage.svg
-        path: ./coverage.svg
+        name: coverage.zip
+        path: ./coverage.zip
+    - name: Check in
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./coverage.zip
+    - name: Push changes
+      run: |
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
