@@ -50,30 +50,13 @@ jobs:
     - name: Create coverage report
       run: |
         pytest --junitxml=unittest.xml --cov --cov-report=xml:coverage.xml
-        genbadge coverage -i coverage.xml -o django_app_monitor_coverage.svg -n "Test Coverage"
-    - uses: actions/checkout@v3
-    - name: Upload coverage badge
-      uses: exuanbo/actions-deploy-gist@v1
+        - name: Upload to codecov.io
+      uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
       with:
-        token: ${{ secrets.GIST_SECRET }}
-        gist_id: cd7e2367d8231b7a1aa8e484a5570c8f
-        gist_file_name: django_app_monitor_coverage.svg
-        file_path: django_app_monitor_coverage.svg
-#    - name: Upload coverage results
-#      uses: actions/upload-artifact@v4
-#      with:
-#        name: test-results
-#        path: test-results/*
-#      if: ${{ always() }}
-#    - name: Check in
-#      run: |
-#        git config --local user.email "action@github.com"
-#        git config --local user.name "GitHub Action"
-#        git add test-results/*
-#        git commit -m "Update test results"
-#    - name: Push changes
-#      run: |
-#        git push
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: code-coverage-report
+        path: coverage.xml
 
