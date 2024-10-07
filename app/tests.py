@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from faker import Faker
 
 from app.models import Application, SystemMetric, Alert
+from app.templatetags.app_tags import metrics_color
 
 User = auth.get_user_model()
 
@@ -283,12 +284,13 @@ class ApplicationTestCase(TestCase):
         result = template.render(context)
         self.assertIn('danger', result)
 
-    # def test_metrics_color_success(self):
-    #     # Create values for app
-    #     template = Template(
-    #         """{% load app_tags %}
-    #         {% metrics_color value %}"""
-    #     )
-    #     context = Context({'value': 'working'})
-    #     result = template.render(context)
-    #     self.assertIn('success', result)
+    def test_metrics_color_success(self):
+        self.assertEqual(metrics_color(self.app, 'cpu_percent'), 'default')
+        # # Create values for app
+        # template = Template(
+        #     """{% load app_tags %}
+        #     {% metrics_color value %}"""
+        # )
+        # context = Context({'value': 'working', 'value_type': 'cpu_percent'})
+        # result = template.render(context)
+        # self.assertIn('success', result)
