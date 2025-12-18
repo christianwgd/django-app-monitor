@@ -14,16 +14,23 @@ Including another URLconf
     # 1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from allauth.account.decorators import secure_admin_login
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import RedirectView
 
 
+admin.autodiscover()
+admin.site.site_header = _('Django App Monitor')
+admin.site.login = secure_admin_login(admin.site.login)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('frontend_auth/', include('frontend_auth.urls')),
+    path('accounts/signup/', RedirectView.as_view(url='/', permanent=True)),
+    path('accounts/', include('allauth.urls')),
     path('app/', include('app.urls')),
     path('', RedirectView.as_view(pattern_name='app:list', permanent=False), name='home'),
 ]
