@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import sys
 from pathlib import Path
-from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'axes',
-    'frontend_auth',
     'app',
     'app_monitor',
+    'allauth',
+    'allauth.account',
+    'allauth.mfa',
     'chartjs',
     'dark_mode_switch',
     'django_bootstrap_icons',
@@ -59,15 +59,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'axes.backends.AxesBackend',
-    # Django ModelBackend is the default authentication backend.
-    # 'django.contrib.auth.backends.ModelBackend',
-    # Enable custom auth backend to log in with email address
-    'frontend_auth.backends.LoginWithEmailModelBackend'
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ROOT_URLCONF = 'app_monitor.urls'
@@ -75,7 +72,7 @@ ROOT_URLCONF = 'app_monitor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,10 +121,9 @@ MEDIA_ROOT = Path(BASE_DIR) / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Auth, frontend_auth
-LOGIN_URL = reverse_lazy('frontend_auth:login')
-LOGIN_REDIRECT_URL = reverse_lazy('home')
-LOGOUT_REDIRECT_URL = reverse_lazy('home')
+LOGIN_URL = 'account_login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'account_login'
 
 # bootstrap-icons
 BS_ICONS_CACHE = Path(BASE_DIR) / 'icon_cache'
@@ -148,6 +144,12 @@ BOOTSTRAP5 = {
         "crossorigin": "anonymous",
     },
 }
+
+##################
+# DJANGO_ALLAUTH #
+##################
+ACCOUNT_LOGIN_METHODS = {"username"}
+MFA_PASSKEY_LOGIN_ENABLED = True
 
 ##################
 # LOCAL SETTINGS #
