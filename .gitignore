@@ -180,4 +180,4 @@ fixtures/
 .ruff_cache/
 
 # bs icon cache
-static/icon_cache
+icon_cache/
