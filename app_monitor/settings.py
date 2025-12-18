@@ -9,16 +9,14 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
 import sys
 from pathlib import Path
-
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
-PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
+PROJECT_APP_PATH = Path(Path(__file__).resolve()).parent
+PROJECT_APP = Path(PROJECT_APP_PATH).name
 
 
 # Quick-start development settings - unsuitable for production
@@ -116,10 +114,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = Path(BASE_DIR) / 'static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = Path(BASE_DIR) / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -132,7 +130,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('home')
 
 # bootstrap-icons
-BS_ICONS_CACHE = os.path.join(STATIC_ROOT, 'icon_cache')
+BS_ICONS_CACHE = Path(BASE_DIR) / 'icon_cache'
 
 ###############
 # BOOTSTRAP 5 #
@@ -163,11 +161,12 @@ BOOTSTRAP5 = {
 # local_settings has full access to everything defined in this module.
 # Also force into sys.modules so it's visible to Django's autoreload.
 
-f = os.path.join(PROJECT_APP_PATH, "localsettings.py")
-if os.path.exists(f):
+f = Path(PROJECT_APP_PATH) / "localsettings.py"
+if Path.exists(f):
     import importlib
     module_name = f"{PROJECT_APP}.localsettings"
     module = importlib.import_module(module_name)
     module.__file__ = f
     sys.modules[module_name] = module
-    exec(open(f, "rb").read())  # noqa: S102
+    with Path.open(f, "rb") as settings_file:
+        exec(settings_file.read())  # noqa: S102

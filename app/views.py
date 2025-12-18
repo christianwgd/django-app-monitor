@@ -38,10 +38,7 @@ class AppDetail(UserPassesTestMixin, DetailView):
 
 @require_http_methods(["GET"])
 def instant_update(request, app_id):
-    if 'HTTP_REFERER' in request.META:
-        referer = request.META['HTTP_REFERER']
-    else:
-        referer = reverse('app:list')
+    referer = request.META['HTTP_REFERER'] if 'HTTP_REFERER' in request.META else reverse('app:list')
     try:
         app = Application.objects.get(pk=app_id)
         app.update_status()
