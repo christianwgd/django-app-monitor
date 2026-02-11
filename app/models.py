@@ -14,6 +14,7 @@ from django.contrib import auth
 User = auth.get_user_model()
 
 REQUEST_TIMEOUT = getattr(settings, 'REQUEST_TIMEOUT', 20)
+OK_VALUES = getattr(settings, 'HEALTH_CHECK_OK_VALUES', ['OK'])
 
 FREQUENCY_CHOICES = (
     (5, '5'),
@@ -110,7 +111,7 @@ class Application(models.Model):
             return False
         if self.use_health_check:
             for _key, value in self.health_check.items():
-                if value != 'working':
+                if value not in OK_VALUES:
                     return False
         return True
 
