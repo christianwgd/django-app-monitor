@@ -1,9 +1,10 @@
 from django import template
+from django.conf import settings
 
 from app.models import SystemMetric
 
 register = template.Library()
-
+ok_values = getattr(settings, 'HEALTH_CHECK_OK_VALUES', ['OK'])
 
 @register.filter
 def label(arg):
@@ -18,8 +19,18 @@ def http_status_color(value):
 
 
 @register.simple_tag
+def is_ok(value):
+    return value in ok_values
+
+
+@register.simple_tag
+def strip_param(value):
+    return value.split('(')[0]
+
+
+@register.simple_tag
 def health_check_color(value):
-    if value == 'working':
+    if value in ok_values:
         return 'success'
     return 'danger'
 

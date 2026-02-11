@@ -9,7 +9,7 @@
 {% block bootstrap5_extra_script %}
 {{ block.super }}
 {% if application.use_metrics %}
-<script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'app_monitor/js/jquery-3.6.0.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/chartjs/chart.umd.js' %}"></script>
 <script type="text/javascript">
 {% for value in value_names %}

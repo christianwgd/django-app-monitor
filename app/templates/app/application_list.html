@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static django_bootstrap5 bootstrap_icons humanize %}
+{% load i18n static django_bootstrap5 bootstrap_icons humanize app_tags %}
 
 {% block bootstrap5_extra_head %}
 {{ block.super }}
@@ -43,11 +43,10 @@
                 {% if app.use_health_check %}
                 <p class="mt-2">
                 {% for key, value in app.health_check.items %}
-                    {% if value == 'working' %}
-                        <span class="badge text-bg-success">{{ key }}</span>
-                    {% else %}
-                        <span class="badge text-bg-danger">{{ key }}</span>
-                    {% endif %}
+                    {% is_ok value as ok %}
+                    <span class="badge {% if ok %}text-bg-success{% else %}text-bg-danger{% endif %}">
+                        {% strip_param key %}
+                    </span>
                 {% endfor %}
                 </p>
                 {% endif %}
