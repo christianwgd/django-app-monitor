@@ -45,7 +45,7 @@
                 {% for key, value in app.health_check.items %}
                     {% is_ok value as ok %}
                     <span class="badge {% if ok %}text-bg-success{% else %}text-bg-danger{% endif %}">
-                        {% strip_param key %}
+                        {{ key }}
                     </span>
                 {% endfor %}
                 </p>

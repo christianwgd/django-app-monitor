@@ -1,3 +1,4 @@
+import re
 from urllib.parse import urljoin
 
 import requests
@@ -14,7 +15,6 @@ from django.contrib import auth
 User = auth.get_user_model()
 
 REQUEST_TIMEOUT = getattr(settings, 'REQUEST_TIMEOUT', 20)
-OK_VALUES = getattr(settings, 'HEALTH_CHECK_OK_VALUES', ['OK'])
 
 FREQUENCY_CHOICES = (
     (5, '5'),
@@ -22,6 +22,20 @@ FREQUENCY_CHOICES = (
     (15, '15'),
     (30, '30'),
 )
+
+
+def parse_object(s: str):
+    class_name = s[:s.find("(")]
+    inner = s[s.find("(")+1 : s.rfind(")")]
+    pairs = re.findall(r"(\w+)=('.*?'|\".*?\"|\S+)", inner)
+
+    result = {}
+    for key, value in pairs:
+        if value.startswith(("'", '"')) and value.endswith(("'", '"')):
+            value = value[1:-1]  # noqa: PLW2901
+        result[key] = value
+
+    return class_name, result
 
 
 class Application(models.Model):
@@ -97,7 +111,15 @@ class Application(models.Model):
     def update_status(self):
         self.http_status = self.get_http_status()
         if self.use_health_check:
-            self.health_check = self.get_health_check_data()
+            health_result = self.get_health_check_data()
+            health_check = {}
+            for key, value in health_result.items():
+                if '(' in key:
+                    name, parsed = parse_object(key)
+                    health_check[name] = {'status': value, **parsed}
+                else:
+                    health_check[key] = {'status': 'OK' if value == 'working' else value}
+            self.health_check = health_check
         if self.use_metrics:
             self.create_process_metric()
         self.save()
@@ -111,7 +133,7 @@ class Application(models.Model):
             return False
         if self.use_health_check:
             for _key, value in self.health_check.items():
-                if value not in OK_VALUES:
+                if value['status'] != 'OK':
                     return False
         return True
 

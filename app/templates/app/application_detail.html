@@ -76,14 +76,21 @@
 <div class="row row-cols-1 row-cols-md-2 g-3">
     {% for key, value in application.health_check.items %}
     <div class="col">
-        <div class="card text-center border-{% health_check_color value %}">
+        <div class="card text-center border-{% health_check_color value %} h-100">
             <div class="card-header">
                 <h5 class="mt-2">{{ key }}</h5>
             </div>
             <div class="card-body">
                 <p class="mb-1">
+                    {% for key, value in value.items %}
+                        {% if key != 'status' %}
+                            <strong>{{ key }}:</strong> {{ value }}<br>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="mb-1">
                     <span class="badge text-bg-{% health_check_color value %}">
-                        {{ value }}
+                        {{ value.status }}
                     </span>
                 </p>
             </div>

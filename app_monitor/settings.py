@@ -151,11 +151,6 @@ BOOTSTRAP5 = {
 ACCOUNT_LOGIN_METHODS = {"username"}
 MFA_PASSKEY_LOGIN_ENABLED = True
 
-################
-# Health Check #
-################
-HEALTH_CHECK_OK_VALUES = ['OK', 'working']
-
 ##################
 # LOCAL SETTINGS #
 ##################

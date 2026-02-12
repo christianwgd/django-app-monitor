@@ -100,8 +100,27 @@ class ApplicationTestCase(TestCase):
     def test_is_working_true(self):
         self.app.http_status = 200
         self.app.health_check = {
-            "DiskUsage": "working", "MemoryUsage": "working",
-            "DatabaseBackend": "working", "MigrationsHealthCheck": "working"
+            "DiskUsage": {"status": "OK"},
+            "MemoryUsage": {"status": "OK"},
+            "DatabaseBackend": {"status": "OK"},
+            "MigrationsHealthCheck": {"status": "OK"}
+        }
+        self.app.use_health_check = True
+        self.app.save()
+        self.app.refresh_from_db()
+        self.assertTrue(self.app.is_working())
+
+    def test_is_working_true_version_four(self):
+        self.app.http_status = 200
+        self.app.health_check = {
+            "Disk": {
+                "path": "/var/www/eisadler", "status": "OK",
+                "hostname": "h2652130.stratoserver.net"
+            },
+            "Mail": {"status": "OK", "backend": "django.core.mail.backends.smtp.EmailBackend"},
+            "Memory": {"status": "OK", "hostname": "h2652130.stratoserver.net"},
+            "Storage": {"alias": "default", "status": "OK"},
+            "Database": {"alias": "default", "status": "OK"}
         }
         self.app.use_health_check = True
         self.app.save()
@@ -117,8 +136,11 @@ class ApplicationTestCase(TestCase):
     def test_is_working_false_health_check(self):
         self.app.http_status = 200
         self.app.health_check = {
-            "DiskUsage": "working", "MemoryUsage": "working",
-            "DatabaseBackend": "error", "MigrationsHealthCheck": "working"
+            "Disk": {"path": "/var/www/eisadler", "status": "OK", "hostname": "h2652130.stratoserver.net"},
+            "Mail": {"status": "OK", "backend": "django.core.mail.backends.smtp.EmailBackend"},
+            "Memory": {"status": "OK", "hostname": "h2652130.stratoserver.net"},
+            "Storage": {"alias": "default", "status": "OK"},
+            "Database": {"alias": "default", "status": "ERROR"}
         }
         self.app.use_health_check = True
         self.app.save()
@@ -271,7 +293,7 @@ class ApplicationTestCase(TestCase):
             """{% load app_tags %}
             {% health_check_color value %}"""
         )
-        context = Context({'value': 'working'})
+        context = Context({'value': {'status': 'OK'}})
         result = template.render(context)
         self.assertIn('success', result)
 
@@ -280,7 +302,7 @@ class ApplicationTestCase(TestCase):
             """{% load app_tags %}
             {% health_check_color value %}"""
         )
-        context = Context({'value': 'danger'})
+        context = Context({'value': {'status': 'ERROR'}})
         result = template.render(context)
         self.assertIn('danger', result)
 
