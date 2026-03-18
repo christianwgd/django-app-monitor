@@ -30,7 +30,7 @@ class ApplicationTestCase(TestCase):
         )
         self.app = Application.objects.create(
             name=self.fake.word(),
-            url='https://example.com',
+            url='https://wgdnet.de/',
             metric_days=1,
             frequency=5,
         )
@@ -94,7 +94,11 @@ class ApplicationTestCase(TestCase):
     def test_app_get_health_check_data(self):
         self.assertEqual(
             self.app.get_health_check_data(),
-            {}
+            {
+                "Database(alias='default')": 'OK',
+                "Mail(backend='django.core.mail.backends.smtp.EmailBackend')": 'OK',
+                "Storage(alias='default')": 'OK'
+            }
         )
 
     def test_is_working_true(self):
