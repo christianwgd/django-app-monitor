@@ -8,4 +8,4 @@ django-chartjs==2.3.0
 pillow==12.1.1
 psycopg==3.3.3
 psycopg-binary==3.3.3
-requests==2.32.5
+requests==2.33.1
