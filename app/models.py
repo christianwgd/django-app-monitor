@@ -85,7 +85,7 @@ class Application(models.Model):
     def get_health_check_data(self):
         headers = {'Accept': 'application/json'}
         try:
-            r = requests.get(f'{self.url}/ht/', headers=headers, timeout=self.timeout)
+            r = requests.get(f'{self.url}ht/', headers=headers, timeout=self.timeout)
             if r.status_code == 200:
                 return r.json()
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
