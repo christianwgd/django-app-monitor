@@ -80,7 +80,7 @@ class ApplicationTestCase(TestCase):
         self.assertEqual(Alert.objects.count(), record_count)
 
     def test_app_get_http_status_404(self):
-        self.app.url = 'https://wgdnet.de/not_found/'
+        self.app.url = 'https://wgdnet.de/does-not-exist/'
         self.app.save()
         self.app.refresh_from_db()
         record_count = Alert.objects.count()
@@ -166,7 +166,7 @@ class ApplicationTestCase(TestCase):
         self.app.bg_update = True
         self.app.notify_by_email = True
         # Set some invalid url to get a 404
-        self.app.url = 'https://wgdnet.de/ht/'
+        self.app.url = 'https://wgdnet.de/does-not-exist/'
         self.app.save()
         self.app.refresh_from_db()
         call_command('status_update')
@@ -190,7 +190,7 @@ class ApplicationTestCase(TestCase):
         self.app.bg_update = True
         self.app.notify_by_email = False
         # Set some invalid url to get a 404
-        self.app.url = 'https://wgdnet.de/ht/'
+        self.app.url = 'https://wgdnet.de/does-not-exist/'
         self.app.save()
         self.app.refresh_from_db()
         call_command('status_update')
@@ -203,7 +203,7 @@ class ApplicationTestCase(TestCase):
     def test_app_call_command_status_update_not_sent_twice(self):
         self.app.bg_update = True
         # Set some invalid url to get a 404
-        self.app.url = 'https://wgdnet.de/ht/'
+        self.app.url = 'https://wgdnet.de/does-not-exist/'
         self.app.alert_sent = True
         self.app.save()
         self.app.refresh_from_db()

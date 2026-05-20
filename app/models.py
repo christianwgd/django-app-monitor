@@ -64,7 +64,7 @@ class Application(models.Model):
 
     def get_http_status(self):
         try:
-            r = requests.get(f'{self.url}/', timeout=self.timeout)
+            r = requests.get(f'{self.url}', timeout=self.timeout)
             rc = r.status_code
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             rc = 408
