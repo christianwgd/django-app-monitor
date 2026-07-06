@@ -5,7 +5,7 @@ from app.models import Application, SystemMetric, Alert
 
 @admin.register(Application)
 class ApplicationPostAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'use_health_check', 'use_metrics', 'check_cert', 'notify_by_email']
     autocomplete_fields = ['admins']
 
 
