@@ -108,11 +108,13 @@
             <div class="card-header">
                 <h5 class="mt-2">
                     {% trans 'Certificate Validation' %}
-                    {% if application.cert_expire_status %}
-                        {% bs_icon 'exclamation-circle-fill' color='crimson' %}
-                    {% else %}
-                        {% bs_icon 'check2' color='salem' %}
-                    {% endif %}
+                    <span class="text-{% cert_check_color application.cert_expire_status %}">
+                        {% if application.cert_expire_status %}
+                            {% bs_icon 'exclamation-circle-fill' %}
+                        {% else %}
+                            {% bs_icon 'check-circle-fill' %}
+                        {% endif %}
+                    </span>
                 </h5>
             </div>
             <div class="card-body">
