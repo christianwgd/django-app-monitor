@@ -102,12 +102,18 @@
 
 
 {% if application.check_cert %}
-<h4 class="text-center mt-5"></h4>
-<div class="row row-cols-1 g-3">
+<div class="row row-cols-1 g-3 mt-5">
     <div class="col">
-        <div class="card text-center h-100">
+        <div class="card text-center border-{% cert_check_color application.cert_expire_status %} h-100">
             <div class="card-header">
-                <h5 class="mt-2">{% trans 'Certificate Validation' %}</h5>
+                <h5 class="mt-2">
+                    {% trans 'Certificate Validation' %}
+                    {% if application.cert_expire_status %}
+                        {% bs_icon 'exclamation-circle-fill' color='crimson' %}
+                    {% else %}
+                        {% bs_icon 'check2' color='salem' %}
+                    {% endif %}
+                </h5>
             </div>
             <div class="card-body">
                 <p class="mb-1">

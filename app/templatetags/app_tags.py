@@ -34,6 +34,13 @@ def health_check_color(value):
 
 
 @register.simple_tag
+def cert_check_color(value: bool):  # noqa: FBT001
+    if not value:
+        return 'success'
+    return 'danger'
+
+
+@register.simple_tag
 def metrics_color(app, value_type):
     if app.metrics.count() > 0:
         value = getattr(app.metrics.latest('timestamp'), value_type)

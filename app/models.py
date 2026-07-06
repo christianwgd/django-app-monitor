@@ -6,6 +6,7 @@ import requests
 from http.client import responses
 
 from django.conf import settings
+from django.core.mail import send_mail
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.urls import reverse
@@ -96,8 +97,33 @@ class Application(models.Model):
         return {}
 
     def get_cert_validation_status(self):
-        domain = urlparse(self.url).netloc
-        return ssl_info(domain)
+        if self.check_cert:
+            self.cert_expire_status = False  # Reset status
+            domain = urlparse(self.url).netloc
+            self.cert_issue, self.cert_expiration = ssl_info(domain)
+            cert_warn_days_before = getattr(settings, 'CERT_WARN_DAYS_BEFORE', 10)
+            if self.cert_expiration - timedelta(days=cert_warn_days_before) <= timezone.now():
+                self.cert_expire_status = True
+                date_str = formats.date_format(self.cert_expiration, 'DATE_FORMAT')
+                Alert.objects.create(
+                    app=self,
+                    typus=_('Certificate expiration'),
+                    value=f'{_("Expires on")} {date_str}'
+                )
+                subject = _('Monitoring Alert: {name}').format(name=self.name)
+                message = _(
+                    'Certificate for %(name)s will expire on %(dt)s.'
+                ) % {'name': self.name, 'dt': date_str}
+                from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'wgdsrv@wgdnet.de')
+                recipient_list = [mgr.email for mgr in self.admins.all()]
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=from_email,
+                    recipient_list=recipient_list,
+                    fail_silently=False
+                )
+            self.save()
 
     def create_process_metric(self):
         token = getattr(settings, 'PROCESS_METRICS_TOKEN', None)
@@ -129,15 +155,6 @@ class Application(models.Model):
             self.health_check = health_check
         if self.use_metrics:
             self.create_process_metric()
-        if self.check_cert:
-            self.cert_issue, self.cert_expiration = self.get_cert_validation_status()
-            cert_warn_days_before = getattr(settings, 'CERT_WARN_DAYS_BEFORE', 10)
-            if self.cert_expiration - timedelta(days=cert_warn_days_before) <= timezone.now():
-                Alert.objects.create(
-                    app=self,
-                    typus=_('Certificate expiration'),
-                    value=f'{_("Expires on")} {formats.date_format(self.cert_expiration, 'DATE_FORMAT')}'
-                )
         self.save()
 
     @property
@@ -210,6 +227,7 @@ class Application(models.Model):
     timeout = models.PositiveSmallIntegerField(default=20, verbose_name=_('Timeout'))
     cert_issue = models.DateTimeField(verbose_name=_('Certificate issue'), null=True, blank=True)
     cert_expiration = models.DateTimeField(verbose_name=_('Certificate expiration'), null=True, blank=True)
+    cert_expire_status = models.BooleanField(verbose_name=_('Certificate will expire'), default=False)
 
 class Alert(models.Model):
     """
