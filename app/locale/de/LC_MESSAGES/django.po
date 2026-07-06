@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 12:59+0200\n"
+"POT-Creation-Date: 2026-07-06 14:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Monitoring Alert: {name}"
 msgstr ""
 
-#: management/commands/status_update.py:30 tests.py:181
+#: management/commands/status_update.py:30 tests.py:183
 #, python-brace-format
 msgid "Please check service {name} at {url}."
 msgstr "Prüfen Sie den Service {name} unter {url}"
@@ -37,132 +37,136 @@ msgstr "Prüfen Sie den Service {name} unter {url}"
 msgid "Delete stale metrics"
 msgstr "Alte Metriken löschen"
 
-#: models.py:48 models.py:220 models.py:239
+#: models.py:50 models.py:227 models.py:246
 msgid "Application"
 msgstr "Anwendung"
 
-#: models.py:49 templates/app/application_list.html:13
+#: models.py:51 templates/app/application_list.html:13
 msgid "Applications"
 msgstr "Anwendungen"
 
-#: models.py:75 models.py:180 templates/app/application_detail.html:60
-#: tests.py:91
+#: models.py:77 models.py:187 templates/app/application_detail.html:60
+#: tests.py:93
 msgid "HTTP Status"
 msgstr ""
 
-#: models.py:150
-msgid "Name"
-msgstr ""
-
-#: models.py:151
-msgid "URL"
-msgstr ""
-
-#: models.py:153
-msgid "Administrators"
-msgstr "Administratoren"
-
-#: models.py:156
-msgid "Logo"
-msgstr ""
-
-#: models.py:160
-msgid "Notify by email"
-msgstr "Benachrichtigung per E-Mail"
-
-#: models.py:163
-msgid "Use Django health check"
-msgstr "Django health check verwenden"
-
-#: models.py:166
-msgid "Use psutil metrics"
-msgstr "psutil Metriken verwenden"
-
-#: models.py:169
-msgid "Update in background"
-msgstr "Im Hintergrund aktualisieren"
-
-#: models.py:172
-msgid "Last update"
-msgstr "Letzte Aktualisierung"
-
-#: models.py:176
-msgid "Check certificate"
-msgstr "Zertifikat prüfen"
-
-#: models.py:183
-msgid "Health Check Status"
-msgstr ""
-
-#: models.py:187
-msgid "Max. CPU Percentage"
-msgstr "Max. CPU Verbrauch in Prozent"
-
-#: models.py:190
-msgid "Max. Memory Percentage"
-msgstr "Max. Speicherbelegung in Prozent"
-
-#: models.py:193
-msgid "Alert sent"
-msgstr "Alarm gesendet"
-
-#: models.py:196
-msgid "Show metrics for number of days"
-msgstr "Zeige Metriken für Anzahl Tage"
-
-#: models.py:198
-msgid "After this time old metrics will be deleted"
-msgstr "Danach werden alte Metriken gelöscht"
-
-#: models.py:201
-msgid "Test frequency"
-msgstr "Häufigkeit der Prüfung"
-
-#: models.py:204
-msgid "Timeout"
-msgstr ""
-
-#: models.py:205 templates/app/application_detail.html:114
-msgid "Certificate issue"
-msgstr "Zertifikat Ausgabe"
-
-#: models.py:206 templates/app/application_detail.html:115
+#: models.py:139 models.py:213 templates/app/application_detail.html:115
 msgid "Certificate expiration"
 msgstr "Zertifikat Ablauf"
 
-#: models.py:214
+#: models.py:140
+msgid "Expires on"
+msgstr "Läuft ab am"
+
+#: models.py:157
+msgid "Name"
+msgstr ""
+
+#: models.py:158
+msgid "URL"
+msgstr ""
+
+#: models.py:160
+msgid "Administrators"
+msgstr "Administratoren"
+
+#: models.py:163
+msgid "Logo"
+msgstr ""
+
+#: models.py:167
+msgid "Notify by email"
+msgstr "Benachrichtigung per E-Mail"
+
+#: models.py:170
+msgid "Use Django health check"
+msgstr "Django health check verwenden"
+
+#: models.py:173
+msgid "Use psutil metrics"
+msgstr "psutil Metriken verwenden"
+
+#: models.py:176
+msgid "Update in background"
+msgstr "Im Hintergrund aktualisieren"
+
+#: models.py:179
+msgid "Last update"
+msgstr "Letzte Aktualisierung"
+
+#: models.py:183
+msgid "Check certificate"
+msgstr "Zertifikat prüfen"
+
+#: models.py:190
+msgid "Health Check Status"
+msgstr ""
+
+#: models.py:194
+msgid "Max. CPU Percentage"
+msgstr "Max. CPU Verbrauch in Prozent"
+
+#: models.py:197
+msgid "Max. Memory Percentage"
+msgstr "Max. Speicherbelegung in Prozent"
+
+#: models.py:200
+msgid "Alert sent"
+msgstr "Alarm gesendet"
+
+#: models.py:203
+msgid "Show metrics for number of days"
+msgstr "Zeige Metriken für Anzahl Tage"
+
+#: models.py:205
+msgid "After this time old metrics will be deleted"
+msgstr "Danach werden alte Metriken gelöscht"
+
+#: models.py:208
+msgid "Test frequency"
+msgstr "Häufigkeit der Prüfung"
+
+#: models.py:211
+msgid "Timeout"
+msgstr ""
+
+#: models.py:212 templates/app/application_detail.html:114
+msgid "Certificate issue"
+msgstr "Zertifikat Ausgabe"
+
+#: models.py:221
 msgid "Alert"
 msgstr "Warnung"
 
-#: models.py:215 templates/app/application_detail.html:154
+#: models.py:222 templates/app/application_detail.html:154
 msgid "Alerts"
 msgstr "Warnungen"
 
-#: models.py:218 models.py:237 templates/app/application_detail.html:161
+#: models.py:225 models.py:244 templates/app/application_detail.html:161
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: models.py:223 templates/app/application_detail.html:162
+#: models.py:230 templates/app/application_detail.html:162
 msgid "Type"
 msgstr "Typ"
 
-#: models.py:224 templates/app/application_detail.html:163
+#: models.py:231 templates/app/application_detail.html:163
 msgid "Value"
 msgstr "Wert"
 
-#: models.py:233
+#: models.py:240
 msgid "System metric"
 msgstr "System Metrik"
 
-#: models.py:234 templates/app/application_detail.html:124
+#: models.py:241 templates/app/application_detail.html:124
 msgid "System metrics"
 msgstr "System Metriken"
 
-#: models.py:242
+#: models.py:249
 msgid "CPU percent"
 msgstr "CPU Prozent"
 
-#: models.py:243
+#: models.py:250
 msgid "Memnory percent"
 msgstr "Speicherbelegung in Prozent"
 

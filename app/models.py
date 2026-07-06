@@ -1,4 +1,5 @@
 import re
+from datetime import timedelta
 from urllib.parse import urljoin, urlparse
 
 import requests
@@ -8,6 +9,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone, formats
 from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
 
@@ -129,6 +131,13 @@ class Application(models.Model):
             self.create_process_metric()
         if self.check_cert:
             self.cert_issue, self.cert_expiration = self.get_cert_validation_status()
+            cert_warn_days_before = getattr(settings, 'CERT_WARN_DAYS_BEFORE', 10)
+            if self.cert_expiration - timedelta(days=cert_warn_days_before) <= timezone.now():
+                Alert.objects.create(
+                    app=self,
+                    typus=_('Certificate expiration'),
+                    value=f'{_("Expires on")} {formats.date_format(self.cert_expiration, 'DATE_FORMAT')}'
+                )
         self.save()
 
     @property
@@ -217,8 +226,8 @@ class Alert(models.Model):
         Application, verbose_name=_('Application'),
         related_name='alerts', on_delete=models.CASCADE,
     )
-    typus = models.CharField(verbose_name=_('Type'), max_length=50)
-    value = models.CharField(verbose_name=_('Value'), max_length=50)
+    typus = models.CharField(verbose_name=_('Type'), max_length=100)
+    value = models.CharField(verbose_name=_('Value'), max_length=100)
 
 
 class SystemMetric(models.Model):
