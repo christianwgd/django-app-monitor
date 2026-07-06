@@ -1,5 +1,6 @@
 from datetime import timedelta
 from urllib.parse import urljoin
+from unittest.mock import MagicMock, patch
 
 from django.conf import settings
 from django.core import mail
@@ -8,11 +9,12 @@ from django.template import Template, Context
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib import auth
-from django.utils.timezone import now
+from django.utils.timezone import now, get_current_timezone
 from django.utils.translation import gettext_lazy as _
 from faker import Faker
 
 from app.models import Application, SystemMetric, Alert
+from app.cert_validation import ssl_info
 from app.templatetags.app_tags import metrics_color
 
 User = auth.get_user_model()
@@ -320,3 +322,50 @@ class ApplicationTestCase(TestCase):
         # context = Context({'value': 'working', 'value_type': 'cpu_percent'})
         # result = template.render(context)
         # self.assertIn('success', result)
+
+    @patch('app.cert_validation.get_current_timezone')
+    @patch('app.cert_validation.socket.create_connection')
+    @patch('app.cert_validation.ssl.create_default_context')
+    def test_ssl_info_success(self, mock_context, mock_create_connection, mock_get_current_timezone):
+        mock_get_current_timezone.return_value = get_current_timezone()
+
+        socket_cm = MagicMock()
+        socket_cm.__enter__.return_value = MagicMock()
+        socket_cm.__exit__.return_value = False
+        mock_create_connection.return_value = socket_cm
+
+        ssl_socket = MagicMock()
+        ssl_socket.__enter__.return_value = MagicMock(
+            getpeercert=MagicMock(
+                return_value={
+                    'notBefore': 'Jan  2 03:04:05 2026 GMT',
+                    'notAfter': 'Feb  3 04:05:06 2027 GMT',
+                }
+            )
+        )
+        ssl_socket.__exit__.return_value = False
+        mock_context.return_value.wrap_socket.return_value = ssl_socket
+
+        issue, expiry = ssl_info('example.com')
+
+        self.assertEqual(issue.year, 2026)
+        self.assertEqual(issue.month, 1)
+        self.assertEqual(issue.day, 2)
+        self.assertEqual(issue.hour, 3)
+        self.assertEqual(expiry.year, 2027)
+        self.assertEqual(expiry.month, 2)
+        self.assertEqual(expiry.day, 3)
+        self.assertEqual(expiry.hour, 4)
+        mock_context.assert_called_once()
+        mock_create_connection.assert_called_once_with(('example.com', 443))
+        mock_context.return_value.wrap_socket.assert_called_once_with(
+            socket_cm.__enter__.return_value,
+            server_hostname='example.com',
+        )
+
+    @patch('app.cert_validation.socket.create_connection', side_effect=OSError)
+    @patch('app.cert_validation.ssl.create_default_context')
+    def test_ssl_info_connection_error(self, mock_context, mock_create_connection):
+        self.assertEqual(ssl_info('example.com'), (None, None))
+        mock_context.assert_called_once()
+        mock_create_connection.assert_called_once_with(('example.com', 443))

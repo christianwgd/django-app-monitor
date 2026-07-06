@@ -100,6 +100,26 @@
 </div>
 {% endif %}
 
+
+{% if application.check_cert %}
+<h4 class="text-center mt-5"></h4>
+<div class="row row-cols-1 g-3">
+    <div class="col">
+        <div class="card text-center h-100">
+            <div class="card-header">
+                <h5 class="mt-2">{% trans 'Certificate Validation' %}</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-1">
+                    <strong>{% trans 'Certificate issue' %}:</strong> {{ application.cert_issue }},
+                    <strong>{% trans 'Certificate expiration' %}:</strong> {{ application.cert_expiration }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% if application.use_metrics %}
 <h4 class="text-center mt-5">{% trans 'System metrics' %}</h4>
 <div class="row row-cols-1 row-cols-md-2 g-3 mb-3">

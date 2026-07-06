@@ -1,5 +1,5 @@
 import re
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
 from http.client import responses
@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib import auth
 
+from app.cert_validation import ssl_info
 
 User = auth.get_user_model()
 
@@ -92,6 +93,10 @@ class Application(models.Model):
             pass
         return {}
 
+    def get_cert_validation_status(self):
+        domain = urlparse(self.url).netloc
+        return ssl_info(domain)
+
     def create_process_metric(self):
         token = getattr(settings, 'PROCESS_METRICS_TOKEN', None)
         if token:
@@ -122,6 +127,8 @@ class Application(models.Model):
             self.health_check = health_check
         if self.use_metrics:
             self.create_process_metric()
+        if self.check_cert:
+            self.cert_issue, self.cert_expiration = self.get_cert_validation_status()
         self.save()
 
     @property
@@ -162,6 +169,9 @@ class Application(models.Model):
         auto_now=True, verbose_name=_('Last update'),
         null=True, blank=True
     )
+    check_cert = models.BooleanField(
+        verbose_name=_('Check certificate'), default=False
+    )
 
     http_status = models.PositiveIntegerField(
         verbose_name=_('HTTP Status'), null=True, blank=True
@@ -189,7 +199,8 @@ class Application(models.Model):
         choices=FREQUENCY_CHOICES, default=15,
     )
     timeout = models.PositiveSmallIntegerField(default=20, verbose_name=_('Timeout'))
-
+    cert_issue = models.DateTimeField(verbose_name=_('Certificate issue'), null=True, blank=True)
+    cert_expiration = models.DateTimeField(verbose_name=_('Certificate expiration'), null=True, blank=True)
 
 class Alert(models.Model):
     """
