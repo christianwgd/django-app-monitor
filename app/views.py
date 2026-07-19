@@ -21,6 +21,16 @@ class AppList(LoginRequiredMixin, ListView):
         return Application.objects.filter(admins=self.request.user)
 
 
+class AppListCert(LoginRequiredMixin, ListView):
+    model = Application
+    template_name = 'app/application_cert.html'
+
+    def get_queryset(self):
+        return Application.objects.filter(
+            admins=self.request.user
+        ).order_by('cert_expiration')
+
+
 class AppDetail(UserPassesTestMixin, DetailView):
     model = Application
 
