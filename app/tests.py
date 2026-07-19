@@ -261,6 +261,18 @@ class ApplicationTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('app:list'))
 
+    def test_application_immedeate_update_view_not_exists(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse('app:update', kwargs={'app_id': 99}))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('app:list'))
+
+    def test_application_instant_update_all(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse('app:update-all'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('app:list'))
+
     # Template tag tests
     def test_label_filter(self):
         template = Template(

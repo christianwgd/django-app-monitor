@@ -35,5 +35,5 @@ urlpatterns = [
     path('', RedirectView.as_view(pattern_name='app:list', permanent=False), name='home'),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG:  # pragma: no cover
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
