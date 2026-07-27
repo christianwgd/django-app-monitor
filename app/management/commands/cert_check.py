@@ -18,5 +18,6 @@ class Command(BaseCommand):
             # Check certificate, typotically every 24 hours
             log_msg = f'Check certificate for {app.name}'
             app.get_cert_validation_status()
+            app.save()
             logger.info(log_msg)
 

@@ -40,12 +40,7 @@ class Command(BaseCommand):
                         )
                         app.alert_sent = True
                         log_msg += ', alert sent'
-                else:
-                    log_msg += ', ok'
-                    app.alert_sent = False
                 app.save()
-            else:
-                log_msg = f'{app.name} not due'
-            logger.info(log_msg)
+                logger.info(log_msg)
 
 
