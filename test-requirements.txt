@@ -1,8 +1,8 @@
-coverage==7.15.2
-Faker==40.31.0
+coverage==7.15.3
+Faker==40.36.0
 genbadge==1.1.3
 defusedxml==0.7.1
 pytest==9.1.1
 pytest-cov==7.1.0
 pytest-django==4.12.0
-ruff==0.15.22
+ruff==0.16.1
