@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -64,6 +65,16 @@ def instant_update_all(request):
         app.update_status()
     messages.success(request, _('App status updated for all applications'))
     return redirect(reverse('app:list'))
+
+
+@require_http_methods(["GET"])
+@login_required
+def instant_update_certs_all(request):
+    for app in Application.objects.all():
+        app.get_cert_validation_status()
+        app.save()
+    messages.success(request, _('Certificate information updated for all applications'))
+    return redirect(reverse('app:certs'))
 
 
 class ValuesJSONView(BaseLineChartView):

@@ -31,4 +31,12 @@
         {% endfor %}
     </tbody>
 </table>
+
+<div class="row mt-3">
+    <div class="col">
+        <a class="btn btn-secondary" href="{% url 'app:update-cert-all' %}">
+            {% bs_icon 'arrow-clockwise' %}
+        </a>
+    </div>
+</div>
 {% endblock %}

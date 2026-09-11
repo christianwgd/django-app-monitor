@@ -98,7 +98,7 @@ class ApplicationTestCase(TestCase):
             self.app.get_health_check_data(),
             {
                 "Database(alias='default')": 'OK',
-                "Mail(backend='django.core.mail.backends.smtp.EmailBackend')": 'OK',
+                "Mail(alias='default')": 'OK',
                 "Storage(alias='default')": 'OK'
             }
         )
@@ -272,6 +272,12 @@ class ApplicationTestCase(TestCase):
         response = self.client.get(reverse('app:update-all'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('app:list'))
+
+    def test_application_instant_cert_update_all(self):
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse('app:update-cert-all'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('app:certs'))
 
     # Template tag tests
     def test_label_filter(self):

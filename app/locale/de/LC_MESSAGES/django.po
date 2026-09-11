@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:19+0200\n"
+"POT-Creation-Date: 2026-09-11 15:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,8 @@ msgstr "Anwendungen"
 msgid "HTTP Status"
 msgstr ""
 
-#: models.py:110 models.py:229 templates/app/application_detail.html:121
+#: models.py:110 models.py:229 templates/app/application_cert.html:21
+#: templates/app/application_detail.html:123
 msgid "Certificate expiration"
 msgstr "Zertifikat Ablauf"
 
@@ -67,7 +68,7 @@ msgstr "Läuft ab am"
 msgid "Certificate for %(name)s will expire on %(dt)s."
 msgstr "Zertifikat für %(name)s wird am %(dt)s ablaufen."
 
-#: models.py:173
+#: models.py:173 templates/app/application_cert.html:19
 msgid "Name"
 msgstr ""
 
@@ -139,7 +140,8 @@ msgstr "Häufigkeit der Prüfung"
 msgid "Timeout"
 msgstr ""
 
-#: models.py:228 templates/app/application_detail.html:120
+#: models.py:228 templates/app/application_cert.html:20
+#: templates/app/application_detail.html:122
 msgid "Certificate issue"
 msgstr "Zertifikat Ausgabe"
 
@@ -151,19 +153,19 @@ msgstr "Zertifikat läuft ab"
 msgid "Alert"
 msgstr "Warnung"
 
-#: models.py:239 templates/app/application_detail.html:160
+#: models.py:239 templates/app/application_detail.html:162
 msgid "Alerts"
 msgstr "Warnungen"
 
-#: models.py:242 models.py:261 templates/app/application_detail.html:167
+#: models.py:242 models.py:261 templates/app/application_detail.html:169
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: models.py:247 templates/app/application_detail.html:168
+#: models.py:247 templates/app/application_detail.html:170
 msgid "Type"
 msgstr "Typ"
 
-#: models.py:248 templates/app/application_detail.html:169
+#: models.py:248 templates/app/application_detail.html:171
 msgid "Value"
 msgstr "Wert"
 
@@ -171,7 +173,7 @@ msgstr "Wert"
 msgid "System metric"
 msgstr "System Metrik"
 
-#: models.py:258 templates/app/application_detail.html:130
+#: models.py:258 templates/app/application_detail.html:132
 msgid "System metrics"
 msgstr "System Metriken"
 
@@ -182,6 +184,11 @@ msgstr "CPU Prozent"
 #: models.py:267
 msgid "Memnory percent"
 msgstr "Speicherbelegung in Prozent"
+
+#: templates/app/application_cert.html:13
+#: templates/app/application_detail.html:110
+msgid "Certificate Validation"
+msgstr "Zertifikat Validierung"
 
 #: templates/app/application_detail.html:48
 #: templates/app/application_detail.html:52
@@ -195,15 +202,11 @@ msgstr "Gehe zu"
 msgid "Health Check"
 msgstr ""
 
-#: templates/app/application_detail.html:110
-msgid "Certificate Validation"
-msgstr "Zertifikat Validierung"
-
-#: templates/app/application_detail.html:145
+#: templates/app/application_detail.html:147
 msgid "Last"
 msgstr "Letzte"
 
-#: templates/app/application_detail.html:147
+#: templates/app/application_detail.html:149
 msgid "hours"
 msgstr "Stunden"
 
@@ -211,11 +214,15 @@ msgstr "Stunden"
 msgid "Updated"
 msgstr "Aktualisiert"
 
-#: views.py:45
+#: views.py:56
 #, python-brace-format
 msgid "App status updated for {name}"
 msgstr "Status für {name} aktualisiert"
 
-#: views.py:55
+#: views.py:66
 msgid "App status updated for all applications"
 msgstr "Status für alle Anwendung aktualisiert"
+
+#: views.py:76
+msgid "Certificate information updated for all applications"
+msgstr "Zertifikat-Informationen für alle Anwendungen aktualisiert"

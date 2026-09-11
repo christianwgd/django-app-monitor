@@ -11,5 +11,6 @@ urlpatterns = [
     path('detail/<int:pk>/', views.AppDetail.as_view(), name='detail'),
     path('update/<int:app_id>/', views.instant_update, name='update'),
     path('update-all/', views.instant_update_all, name='update-all'),
+    path('update-cert-all/', views.instant_update_certs_all, name='update-cert-all'),
     path('chart/<int:app_id>/<str:name>/', views.ValuesJSONView.as_view(), name='chart'),
 ]
