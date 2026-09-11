@@ -27,7 +27,7 @@ class Command(BaseCommand):
                     if not app.alert_sent and app.notify_by_email:
                         subject = _('Monitoring Alert: {name}').format(name=app.name)
                         message = _(
-                            'Please check service {name} at {url}.'
+                            'Please check service {name} at {url}.',
                         ).format(name=app.name, url=app.get_absolute_uri())
                         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'wgdsrv@wgdnet.de')
                         recipient_list = [mgr.email for mgr in app.admins.all()]
@@ -36,7 +36,7 @@ class Command(BaseCommand):
                             message=message,
                             from_email=from_email,
                             recipient_list=recipient_list,
-                            fail_silently=False
+                            fail_silently=False,
                         )
                         app.alert_sent = True
                         log_msg += ', alert sent'

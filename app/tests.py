@@ -1,20 +1,20 @@
 from datetime import timedelta
-from urllib.parse import urljoin
 from unittest.mock import MagicMock, patch
+from urllib.parse import urljoin
 
 from django.conf import settings
+from django.contrib import auth
 from django.core import mail
 from django.core.management import call_command
-from django.template import Template, Context
+from django.template import Context, Template
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib import auth
-from django.utils.timezone import now, get_current_timezone
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 from faker import Faker
 
-from app.models import Application, SystemMetric, Alert
 from app.cert_validation import ssl_info
+from app.models import Alert, Application, SystemMetric
 from app.templatetags.app_tags import metrics_color
 
 User = auth.get_user_model()
@@ -44,14 +44,14 @@ class ApplicationTestCase(TestCase):
     def test_app_get_absolute_url(self):
         self.assertEqual(
             self.app.get_absolute_url(),
-            reverse('app:detail', kwargs={'pk': self.app.id})
+            reverse('app:detail', kwargs={'pk': self.app.id}),
         )
 
     def test_app_get_absolute_uri(self):
         domain = getattr(settings, 'DEFAULT_DOMAIN', 'https://monitor.wgdnet.de')
         self.assertEqual(
             self.app.get_absolute_uri(),
-            urljoin(domain, self.app.get_absolute_url())
+            urljoin(domain, self.app.get_absolute_url()),
         )
 
     def test_is_due_5(self):
@@ -99,8 +99,8 @@ class ApplicationTestCase(TestCase):
             {
                 "Database(alias='default')": 'OK',
                 "Mail(alias='default')": 'OK',
-                "Storage(alias='default')": 'OK'
-            }
+                "Storage(alias='default')": 'OK',
+            },
         )
 
     def test_is_working_true(self):
@@ -109,7 +109,7 @@ class ApplicationTestCase(TestCase):
             "DiskUsage": {"status": "OK"},
             "MemoryUsage": {"status": "OK"},
             "DatabaseBackend": {"status": "OK"},
-            "MigrationsHealthCheck": {"status": "OK"}
+            "MigrationsHealthCheck": {"status": "OK"},
         }
         self.app.use_health_check = True
         self.app.save()
@@ -121,12 +121,12 @@ class ApplicationTestCase(TestCase):
         self.app.health_check = {
             "Disk": {
                 "path": "/var/www/eisadler", "status": "OK",
-                "hostname": "h2652130.stratoserver.net"
+                "hostname": "h2652130.stratoserver.net",
             },
             "Mail": {"status": "OK", "backend": "django.core.mail.backends.smtp.EmailBackend"},
             "Memory": {"status": "OK", "hostname": "h2652130.stratoserver.net"},
             "Storage": {"alias": "default", "status": "OK"},
-            "Database": {"alias": "default", "status": "OK"}
+            "Database": {"alias": "default", "status": "OK"},
         }
         self.app.use_health_check = True
         self.app.save()
@@ -146,7 +146,7 @@ class ApplicationTestCase(TestCase):
             "Mail": {"status": "OK", "backend": "django.core.mail.backends.smtp.EmailBackend"},
             "Memory": {"status": "OK", "hostname": "h2652130.stratoserver.net"},
             "Storage": {"alias": "default", "status": "OK"},
-            "Database": {"alias": "default", "status": "ERROR"}
+            "Database": {"alias": "default", "status": "ERROR"},
         }
         self.app.use_health_check = True
         self.app.save()
@@ -177,13 +177,13 @@ class ApplicationTestCase(TestCase):
         self.assertEqual(self.app.last_update.date(), now().date())
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
-            mail.outbox[0].subject, f'Monitoring Alert: {self.app.name}'
+            mail.outbox[0].subject, f'Monitoring Alert: {self.app.name}',
         )
         message = _(
-            'Please check service {name} at {url}.'
+            'Please check service {name} at {url}.',
         ).format(
             name=self.app.name,
-            url=self.app.get_absolute_uri()
+            url=self.app.get_absolute_uri(),
         )
         self.assertEqual(mail.outbox[0].body, message)
         self.assertTrue(self.app.alert_sent)
@@ -225,7 +225,7 @@ class ApplicationTestCase(TestCase):
             )
             day_before = now() - timedelta(days=1)
             SystemMetric.objects.update(
-                timestamp=day_before
+                timestamp=day_before,
             )
         # Create some current metrics, which will not be deleted
         for i in range(3):
@@ -284,10 +284,10 @@ class ApplicationTestCase(TestCase):
         template = Template(
             """{% load app_tags %}
             {{ value_names.0.0|label }}
-            {{ value_names.1.0|label }}"""
+            {{ value_names.1.0|label }}""",
         )
         context = Context({'value_names': [
-            ('cpu_percent', '%'), ('mem_percent', '%')
+            ('cpu_percent', '%'), ('mem_percent', '%'),
         ]})
 
         result = template.render(context)
@@ -297,7 +297,7 @@ class ApplicationTestCase(TestCase):
     def test_http_status_color_success(self):
         template = Template(
             """{% load app_tags %}
-            {% http_status_color value %}"""
+            {% http_status_color value %}""",
         )
         context = Context({'value': 200})
         result = template.render(context)
@@ -306,7 +306,7 @@ class ApplicationTestCase(TestCase):
     def test_http_status_color_danger(self):
         template = Template(
             """{% load app_tags %}
-            {% http_status_color value %}"""
+            {% http_status_color value %}""",
         )
         context = Context({'value': 500})
         result = template.render(context)
@@ -315,7 +315,7 @@ class ApplicationTestCase(TestCase):
     def test_health_check_color_success(self):
         template = Template(
             """{% load app_tags %}
-            {% health_check_color value %}"""
+            {% health_check_color value %}""",
         )
         context = Context({'value': {'status': 'OK'}})
         result = template.render(context)
@@ -324,7 +324,7 @@ class ApplicationTestCase(TestCase):
     def test_health_check_color_danger(self):
         template = Template(
             """{% load app_tags %}
-            {% health_check_color value %}"""
+            {% health_check_color value %}""",
         )
         context = Context({'value': {'status': 'ERROR'}})
         result = template.render(context)
@@ -358,8 +358,8 @@ class ApplicationTestCase(TestCase):
                 return_value={
                     'notBefore': 'Jan  2 03:04:05 2026 GMT',
                     'notAfter': 'Feb  3 04:05:06 2027 GMT',
-                }
-            )
+                },
+            ),
         )
         ssl_socket.__exit__.return_value = False
         mock_context.return_value.wrap_socket.return_value = ssl_socket

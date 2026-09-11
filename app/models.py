@@ -1,18 +1,17 @@
 import re
 from datetime import timedelta
+from http.client import responses
 from urllib.parse import urljoin, urlparse
 
 import requests
-from http.client import responses
-
 from django.conf import settings
+from django.contrib import auth
 from django.core.mail import send_mail
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone, formats
+from django.utils import formats, timezone
 from django.utils.translation import gettext_lazy as _
-from django.contrib import auth
 
 from app.cert_validation import ssl_info
 
@@ -76,7 +75,7 @@ class Application(models.Model):
             Alert.objects.create(
                 app=self,
                 typus=_('HTTP Status'),
-                value=f'{rc} {responses[rc]}'
+                value=f'{rc} {responses[rc]}',
             )
         return rc
 
@@ -108,11 +107,11 @@ class Application(models.Model):
                 Alert.objects.create(
                     app=self,
                     typus=_('Certificate expiration'),
-                    value=f'{_("Expires on")} {date_str}'
+                    value=f'{_("Expires on")} {date_str}',
                 )
                 subject = _('Monitoring Alert: {name}').format(name=self.name)
                 message = _(
-                    'Certificate for %(name)s will expire on %(dt)s.'
+                    'Certificate for %(name)s will expire on %(dt)s.',
                 ) % {'name': self.name, 'dt': date_str}
                 from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'wgdsrv@wgdnet.de')
                 recipient_list = [mgr.email for mgr in self.admins.all()]
@@ -121,7 +120,7 @@ class Application(models.Model):
                     message=message,
                     from_email=from_email,
                     recipient_list=recipient_list,
-                    fail_silently=False
+                    fail_silently=False,
                 )
             self.save()
 
@@ -165,7 +164,7 @@ class Application(models.Model):
         if self.http_status != 200:
             return False
         if self.use_health_check:
-            for _key, value in self.health_check.items():
+            for value in self.health_check.values():
                 if value['status'] != 'OK':
                     return False
         return True
@@ -173,52 +172,52 @@ class Application(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     url = models.URLField(verbose_name=_('URL'))
     admins = models.ManyToManyField(
-        User, verbose_name=_('Administrators'), related_name='apps'
+        User, verbose_name=_('Administrators'), related_name='apps',
     )
     logo = models.ImageField(
         max_length=255, upload_to='apps/', verbose_name=_('Logo'),
-        null=True, blank=True
+        null=True, blank=True,
     )
     notify_by_email = models.BooleanField(
         verbose_name=_('Notify by email'), default=False,
     )
     use_health_check = models.BooleanField(
-        verbose_name=_('Use Django health check'), default=False
+        verbose_name=_('Use Django health check'), default=False,
     )
     use_metrics = models.BooleanField(
-        verbose_name=_('Use psutil metrics'), default=False
+        verbose_name=_('Use psutil metrics'), default=False,
     )
     bg_update = models.BooleanField(
-        verbose_name=_('Update in background'), default=False
+        verbose_name=_('Update in background'), default=False,
     )
     last_update = models.DateTimeField(
         auto_now=True, verbose_name=_('Last update'),
-        null=True, blank=True
+        null=True, blank=True,
     )
     check_cert = models.BooleanField(
-        verbose_name=_('Check certificate'), default=False
+        verbose_name=_('Check certificate'), default=False,
     )
 
     http_status = models.PositiveIntegerField(
-        verbose_name=_('HTTP Status'), null=True, blank=True
+        verbose_name=_('HTTP Status'), null=True, blank=True,
     )
     health_check = models.JSONField(
-        verbose_name=_('Health Check Status'), null=True, blank=True
+        verbose_name=_('Health Check Status'), null=True, blank=True,
     )
 
     max_cpu_percent = models.FloatField(
-        verbose_name=_('Max. CPU Percentage'), default=0.8
+        verbose_name=_('Max. CPU Percentage'), default=0.8,
     )
     max_mem_percent = models.FloatField(
-        verbose_name=_('Max. Memory Percentage'), default=0.8
+        verbose_name=_('Max. Memory Percentage'), default=0.8,
     )
     alert_sent = models.BooleanField(
-        verbose_name=_('Alert sent'), default=False
+        verbose_name=_('Alert sent'), default=False,
     )
     metric_days = models.PositiveIntegerField(
         verbose_name=_('Show metrics for number of days'), default=1,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        help_text=_('After this time old metrics will be deleted')
+        help_text=_('After this time old metrics will be deleted'),
     )
     frequency =  models.IntegerField(
         verbose_name=_('Test frequency'),
@@ -239,6 +238,9 @@ class Alert(models.Model):
         verbose_name_plural = _('Alerts')
         ordering = ['-timestamp']
 
+    def __str__(self):
+        return f'{self.app.name} Alert'
+
     timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
     app = models.ForeignKey(
         Application, verbose_name=_('Application'),
@@ -257,6 +259,9 @@ class SystemMetric(models.Model):
         verbose_name = _('System metric')
         verbose_name_plural = _('System metrics')
         ordering = ['timestamp']
+
+    def __str__(self):
+        return f'{self.app.name} SystemMetric'
 
     timestamp = models.DateTimeField(auto_now=True, verbose_name=_('Timestamp'))
     app = models.ForeignKey(

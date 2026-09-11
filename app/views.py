@@ -1,16 +1,16 @@
 from datetime import timedelta
 
+from chartjs.views.lines import BaseLineChartView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import formats
-from django.utils.timezone import now, localtime
-from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView, DetailView
+from django.utils.timezone import localtime, now
 from django.utils.translation import gettext_lazy as _
-from chartjs.views.lines import BaseLineChartView
+from django.views.decorators.http import require_http_methods
+from django.views.generic import DetailView, ListView
 
 from app.models import Application, SystemMetric
 
@@ -28,7 +28,7 @@ class AppListCert(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Application.objects.filter(
-            admins=self.request.user
+            admins=self.request.user,
         ).order_by('cert_expiration')
 
 
@@ -41,7 +41,7 @@ class AppDetail(UserPassesTestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['value_names'] = [
-            ('cpu_percent', '%'), ('mem_percent', '%')
+            ('cpu_percent', '%'), ('mem_percent', '%'),
         ]
         context['hours'] = self.object.metric_days * 24
         return context
@@ -86,7 +86,7 @@ class ValuesJSONView(BaseLineChartView):
         app = Application.objects.get(id=kwargs.get('app_id'))
         from_time = now() - timedelta(hours=24 * app.metric_days)
         self.queryset = SystemMetric.objects.filter(
-            app=app, timestamp__gte=from_time
+            app=app, timestamp__gte=from_time,
         ).order_by('timestamp')
         return super().get(request, *args, **kwargs)
 

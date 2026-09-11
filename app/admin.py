@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app.models import Application, SystemMetric, Alert
+from app.models import Alert, Application, SystemMetric
 
 
 @admin.register(Application)
